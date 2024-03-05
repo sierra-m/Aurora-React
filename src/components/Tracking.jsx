@@ -188,7 +188,7 @@ class Tracking extends Component {
   fetchFlight = async (date, imei, uid) => {
     try {
       if (!uid) {
-        let datetime = moment(date, 'YYYY-MM-DD');
+        let datetime = moment.utc(date, 'YYYY-MM-DD');
         uid = encodeUID(datetime, imei);
         console.log(`Encoded uid ${uid} for date ${date}, imei ${imei}`);
       }
@@ -260,15 +260,17 @@ class Tracking extends Component {
           const updateIndicies = data.result.map(point => this.state.currentFlight.add(point));
           await this.state.landingPrediction.updateAltitudeProfile(updateIndicies[0], updateIndicies[updateIndicies.length - 1]);
 
-          let inChange, outChange;
-          //console.log(`data: ${JSON.stringify(data)}`);
-          let newIn = data.pin_states.input_pins;
-          newIn = newIn > 15 ? newIn - 16 : newIn;
-          let newOut = data.pin_states.output_pins;
-          inChange = this.inputPins !== newIn ? !!(this.inputPins = newIn) : false;
-          outChange = this.outputPins !== newOut ? !!(this.outputPins = newOut) : false;
+          if (data.pin_states) {
+            let inChange, outChange;
+            //console.log(`data: ${JSON.stringify(data)}`);
+            let newIn = data.pin_states.input_pins;
+            newIn = newIn > 15 ? newIn - 16 : newIn;
+            let newOut = data.pin_states.output_pins;
+            inChange = this.inputPins !== newIn ? !!(this.inputPins = newIn) : false;
+            outChange = this.outputPins !== newOut ? !!(this.outputPins = newOut) : false;
 
-          this.pinLogPrint(new LogItem(logTime(), (inChange || outChange) ? 'changed' : 'unchanged', `Input: ${this.inputPins} Output: ${this.outputPins}`));
+            this.pinLogPrint(new LogItem(logTime(), (inChange || outChange) ? 'changed' : 'unchanged', `Input: ${this.inputPins} Output: ${this.outputPins}`));
+          }
 
           let elevation = false;
           if (data.elevation) elevation = data.elevation;
@@ -620,6 +622,10 @@ class Tracking extends Component {
                   <Tab.Content>
                     <Tab.Pane eventKey="altitude">
                       <Card.Title className={'mt-3'}>Altitude over Time</Card.Title>
+                      {this.state.selectedPosition &&
+                        <Card.Subtitle>
+                          Selected Point: {this.state.selectedPosition.datetime.clone().local().format('YYYY-MM-DD HH:mm:ss')}
+                        </Card.Subtitle>}
                       <AltitudeChart
                         dataName={'Balloon Altitude'}
                         data={this.state.currentFlight && this.state.currentFlight.altitudes()}
