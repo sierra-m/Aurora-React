@@ -168,27 +168,6 @@ class BaseMap extends Component {
     return Math.sqrt((a.lat - b.lat)**2 + (a.lng - b.lng)**2)
   };
 
-  /*selectPoint = (event) => {
-    let selected = {
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng()
-    };
-    for (let i = 0; i < this.props.coordinates.length - 1; i++) {
-      let before = this.props.coordinates[i];
-      let after = this.props.coordinates[i+1];
-      let beforeAngle = this.coordAngle(before, selected);
-      let afterAngle = this.coordAngle(after, selected);
-      let diff = afterAngle - beforeAngle;
-      if (Math.abs((Math.PI - diff) / Math.PI) < 0.05) {
-        if (this.coordDistance(before, selected) < this.coordDistance(after, selected)) {
-          this.props.selectPosition(i);
-        } else {
-          this.props.selectPosition(i+1);
-        }
-      }
-    }
-  };*/
-
   selectPoint = (event) => {
     let selected = {
       lat: event.latLng.lat(),
@@ -209,7 +188,7 @@ class BaseMap extends Component {
   render() {
     return (
       <GoogleMap
-        defaultZoom={4}
+        defaultZoom={(this.props.defaultCenter && 11) || 4}
         //center={this.props.defaultCenter || {lat: 45.662968, lng: -111.044904}}
         ref={(map) => map && map.panTo(this.props.defaultCenter|| {lat: 39.833333, lng: -98.583333})}
       >
@@ -243,9 +222,8 @@ class BaseMap extends Component {
         />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
-          <InfoMarker position={{lat: partial.latitude, lng: partial.longitude}} altitude={dispMetersFeet(partial.altitude)}
-                      icon={greenBalloon} updateLastWindowClose={this.handleLastWindowClose}
-          />
+          <Marker position={{lat: partial.latitude, lng: partial.longitude}}
+                      icon={greenBalloon} onClick={partial.callback}/>
         ))}
         {this.props.landingZone &&
         <Circle
