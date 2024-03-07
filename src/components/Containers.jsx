@@ -166,7 +166,7 @@ const ActiveFlight = ({uid, start_date, imei, datetime, callback}) => {
   };*/
 
   return (
-    <a style={{cursor: 'pointer'}} onClick={() => callback(undefined, undefined, uid)}>
+    <a style={{cursor: 'pointer'}} onClick={() => callback()}>
       <Card className="card-item quick-shadow">
         <Card.Body>
           <Card.Title>IMEI: {imei}</Card.Title>

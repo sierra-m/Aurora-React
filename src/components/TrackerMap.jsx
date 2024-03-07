@@ -190,7 +190,7 @@ class BaseMap extends Component {
       <GoogleMap
         defaultZoom={4}
         zoom={(this.props.defaultCenter && 11) || 4}
-        ref={(map) => map && 
+        ref={(map) => map &&
             map.panTo(this.props.defaultCenter|| {lat: 39.833333, lng: -98.583333})}
       >
         {this.props.startPosition &&

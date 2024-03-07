@@ -320,7 +320,9 @@ class Tracking extends Component {
         partialPoint.imei = extractIMEI(partialPoint.uid);
         partialPoint.start_date = extractDate(partialPoint.uid);
         partialPoint.datetime = moment.utc(partialPoint.datetime, 'YYYY-MM-DD[T]HH:mm:ss[Z]');
-        partialPoint.callback = this.fetchFlight
+        partialPoint.callback = () => {
+          this.fetchFlight(partialPoint.start_date, partialPoint.imei, partialPoint.uid);
+        }
       }
       await this.setState({activeFlights: data.points});
     }
