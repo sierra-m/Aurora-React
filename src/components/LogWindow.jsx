@@ -78,13 +78,14 @@ export default class LogWindow extends Component {
     let lastOutputPins = this.state.lastOutputPins;
     let newIn = null;
     let newOut = null;
-    let inChanged, outChanged;
-    if (inputPins !== null) {
+    let inChanged = false;
+    let outChanged = false;
+    if (typeof inputPins === "number") {
       newIn = inputPins % 16;
       inChanged = (lastInputPins !== newIn);
       lastInputPins = newIn;
     }
-    if (outputPins !== null) {
+    if (typeof outputPins === "number") {
       newOut = outputPins % 8;
       outChanged = (lastOutputPins !== newOut);
       lastOutputPins = newOut;
@@ -112,7 +113,7 @@ export default class LogWindow extends Component {
   }
 
   componentDidUpdate () {
-    if (this.props.autoscroll) this.scrollToBottom();
+    if (this.state.autoscroll) this.scrollToBottom();
   }
 
   render () {
