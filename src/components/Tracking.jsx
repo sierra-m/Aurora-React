@@ -651,7 +651,13 @@ class Tracking extends Component {
                     </Tab.Pane>
                     <Tab.Pane eventKey="pin-states" className={'py-3'}>
                       <div className={'mt-3'}> </div>
-                      <Card.Text>This log shows Iridium pin states as they come in from an active flight.</Card.Text>
+                      <Card.Text>
+                        This log shows NAL Modem pin states for each time stamp.
+                        <Alert variant={'info'}>
+                          <em>Note:</em> Some flights may not have recorded pin states due to a storage error, this may be fixed
+                          in future updates
+                        </Alert>
+                      </Card.Text>
                       <LogWindow
                         registerControls={this.registerControls}
                         title={'Pin States Log'}
