@@ -35,6 +35,7 @@ import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
+import Alert from 'react-bootstrap/Alert'
 import queryString from 'query-string';
 
 import Select from 'react-select'
