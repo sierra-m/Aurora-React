@@ -283,6 +283,21 @@ class Flight {
     }, [])
   }
 
+  pinStates () {
+    const inputCol = this.fields.indexOf('input_pins');
+    const outputCol = this.fields.indexOf('output_pins');
+    return this.data.reduce((filtered, row) => {
+      if (this.pointValid(row)) {
+        filtered.push({
+          input: row[inputCol],
+          output: row[outputCol],
+          timestamp: moment.unix(row[this.dt_col]).format('YYYY-MM-DD HH:mm:ss')
+        })
+      }
+      return filtered
+    }, [])
+  }
+
   * [Symbol.iterator] () {
     for (let i = 0; i < this.data.length; i++) {
       if (this.pointValid(this.data[i])) {

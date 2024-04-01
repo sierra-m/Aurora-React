@@ -231,11 +231,6 @@ class Tracking extends Component {
 
       this.pinLogClear();
 
-      // Load pin states log
-      for (const point of flight) {
-        this.pinLogPrint(point.input_pins, point.output_pins, point.datetime);
-      }
-
       await this.setState({
         currentFlight: flight,
         selectedPosition: selected,
@@ -246,6 +241,12 @@ class Tracking extends Component {
         groundElevation: false,
         accordionKey: 'flight-data',
         selectedModem: data.modem
+      }, () => {
+        const pinStates = flight.pinStates();
+        // Load pin states log
+        for (const point of pinStates) {
+          this.pinLogPrint(point.input, point.output, point.timestamp);
+        }
       });
       await this.props.history.push(`/tracking?uid=${compressedUid}`);
     } catch (e) {
@@ -645,7 +646,7 @@ class Tracking extends Component {
                     </Tab.Pane>
                     <Tab.Pane eventKey="wind-layers">
                       <Alert variant={'info'}>
-                        Wind layer graph: coming soon! (I promise)
+                        Wind layer graph: coming soon! 🕝
                       </Alert>
                     </Tab.Pane>
                     <Tab.Pane eventKey="pin-states" className={'py-3'}>
