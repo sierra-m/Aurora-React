@@ -27,13 +27,15 @@ import Card from 'react-bootstrap/Card'
 import '../style/logwindow.css'
 import Container from 'react-bootstrap/Container'
 import Badge from 'react-bootstrap/Badge'
+import moment from 'moment'
 
 
 class LogItem {
-  constructor (time, status, snippet) {
+  constructor (time, status, inputPins, outputPins) {
     this.time = time;
     this.status = status;
-    this.snippet = snippet;
+    this.inputPins = inputPins;
+    this.outputPins = outputPins;
   }
 
   toComponent () {
@@ -47,7 +49,7 @@ class LogItem {
         <ColorSamp color={'#d300a4'}>[{this.time}] </ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
-        <samp> | {this.snippet}</samp>
+        <samp> | {`Input: ${this.inputPins} Output: ${this.outputPins}`}</samp>
         {'\n'}
       </div>
     )
@@ -56,7 +58,10 @@ class LogItem {
 
 export default class LogWindow extends Component {
   state = {
-    items: []
+    items: [],
+    lastInputPins: null,
+    lastOutputPins: null,
+    autoscroll: true
   };
 
   defaultProps = {
@@ -67,19 +72,46 @@ export default class LogWindow extends Component {
     this.el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
   }
 
-  print = (thing) => {
-    this.state.items.push(thing);
-    if (this.state.items.length > 20) {
-      this.state.items.shift();
+  print = (inputPins, outputPins, datetime) => {
+    let lastInputPins = this.state.lastInputPins;
+    let lastOutputPins = this.state.lastOutputPins;
+    let newIn = null;
+    let newOut = null;
+    let inChanged, outChanged;
+    if (inputPins !== null) {
+      newIn = inputPins % 16;
+      inChanged = (lastInputPins !== newIn);
+      lastInputPins = newIn;
     }
-    this.setState({items: this.state.items})
+    if (outputPins !== null) {
+      newOut = outputPins % 8;
+      outChanged = (lastOutputPins !== newOut);
+      lastOutputPins = newOut;
+    }
+    const logItem = new LogItem(
+      datetime.format('YYYY-MM-DD HH:mm:ss'),
+      (inChanged || outChanged) ? 'changed' : 'unchanged',
+      newIn,
+      newOut
+    );
+    this.state.items.push(logItem);
+    this.setState({items: this.state.items, lastInputPins: lastInputPins, lastOutputPins: lastOutputPins});
   };
 
+  clear () {
+    this.setState({items: [], lastInputPins: null, lastOutputPins: null});
+  }
+
+  onSwitchChange (event) {
+    this.setState({event.target.checked})
+  }
+
   componentDidMount () {
-    if (this.props.registerPrint !== null) {
-      this.props.registerPrint(this.print);
+    if (this.props.registerControls !== null) {
+      this.props.registerControls(this.print, this.clear);
     }
     if (this.props.autoscroll) this.scrollToBottom();
+    this.setState({autoscroll: this.props.autoscroll});
   }
 
   componentDidUpdate () {
@@ -114,6 +146,13 @@ export default class LogWindow extends Component {
             </Card>
           </Container>
         </Card.Text>
+        <Card.Footer>
+          <Form.Check
+            type="switch"
+            id="autoscroll-switch"
+            label={`Autoscoll: ${this.state.autoscoll ? 'On' : 'Off'}`}
+          />
+        </Card.Footer>
       </Card>
     )
   }

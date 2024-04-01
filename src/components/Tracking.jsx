@@ -159,8 +159,11 @@ class Tracking extends Component {
 
   pinLogPrint = () => {};
 
-  registerPrint = (func) => {
-    this.pinLogPrint = func;
+  pinLogClear = () => {};
+
+  registerControls = (printFunc, clearFunc) => {
+    this.pinLogPrint = printFunc;
+    this.pinLogClear = clearFunc;
   };
 
   /**
@@ -227,6 +230,14 @@ class Tracking extends Component {
         this.updateInterval = setInterval(this.fetchUpdates, UPDATE_DELAY);
         console.log('Enabled updating');
       }
+
+      this.pinLogClear();
+
+      // Load pin states log
+      for (const point of flight) {
+        this.pinLogPrint(point.input_pins, point.output_pins, point.datetime);
+      }
+
       await this.setState({
         currentFlight: flight,
         selectedPosition: selected,
@@ -268,27 +279,8 @@ class Tracking extends Component {
           const updateIndicies = data.result.map(point => this.state.currentFlight.add(point));
           await this.state.landingPrediction.updateAltitudeProfile(updateIndicies[0], updateIndicies[updateIndicies.length - 1]);
 
-          let lastInputPins = this.state.lastInputPins;
-          let lastOutputPins = this.state.lastOutputPins;
-          let newIn = null;
-          let newOut = null;
-          let inChanged, outChanged;
           for (const point of data.result) {
-            if (point.input_pins !== null) {
-              newIn = point.input_pins % 16;
-              inChanged = (lastInputPins !== newIn);
-              lastInputPins = newIn;
-            }
-            if (point.output_pins !== null) {
-              newOut = point.output_pins % 16;
-              outChanged = (lastOutputPins !== newOut);
-              lastOutputPins = newOut;
-            }
-            this.pinLogPrint(new LogItem(
-              logTime(),
-              (inChanged || outChanged) ? 'changed' : 'unchanged',
-              `Input: ${newIn} Output: ${newOut}`
-            ));
+            this.pinLogPrint(point.input_pins, point.output_pins, point.datetime);
           }
 
           let elevation = false;
@@ -656,13 +648,15 @@ class Tracking extends Component {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="wind-layers">
-                      wind layer graph
+                      <Alert variant={'info'}>
+                        Wind layer graph: coming soon! (I promise)
+                      </Alert>
                     </Tab.Pane>
                     <Tab.Pane eventKey="pin-states" className={'py-3'}>
                       <div className={'mt-3'}> </div>
                       <Card.Text>This log shows Iridium pin states as they come in from an active flight.</Card.Text>
                       <LogWindow
-                        registerPrint={this.registerPrint}
+                        registerControls={this.registerControls}
                         title={'Pin States Log'}
                         autoscroll={true}
                       />
