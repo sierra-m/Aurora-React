@@ -103,10 +103,6 @@ export default class LogWindow extends Component {
     this.setState({items: [], lastInputPins: null, lastOutputPins: null});
   }
 
-  toggleCheck () {
-    this.setState({autoscroll: !this.state.autoscroll})
-  }
-
   componentDidMount () {
     if (this.props.registerControls !== null) {
       this.props.registerControls(this.print, this.clear);
@@ -153,7 +149,7 @@ export default class LogWindow extends Component {
               type={"checkbox"}
               id={"autoscroll-check"}
               label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
-              onClick={this.toggleCheck}
+              onClick={() => this.setState({autoscroll: !this.state.autoscroll})}
               checked={this.state.autoscroll}
             />
           </Form>
