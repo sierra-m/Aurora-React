@@ -103,7 +103,7 @@ export default class LogWindow extends Component {
   }
 
   onSwitchChange (event) {
-    this.setState(autoscroll: event.target.checked})
+    this.setState({autoscroll: event.target.checked})
   }
 
   componentDidMount () {
