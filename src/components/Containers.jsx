@@ -78,21 +78,21 @@ const SelectedFlightData = ({
     <div>
       <Card.Text className={'pt-1'}>
         <Table borderless>
-          <tr className={'mt-0 mb-1 pt-0 pb-1'}>
-            <td><strong>Modem:</strong></td>
-            <td align={'right'}>{modem.name}</td>
+          <tr>
+            <td className={'pt-0 pb-1'}><strong>Modem:</strong></td>
+            <td className={'pt-0 pb-1'} align={'right'}>{modem.name}</td>
           </tr>
-          <tr className={'mt-0 mb-1 pt-0 pb-1'}>
-            <td><strong>IMEI:</strong></td>
-            <td align={'right'}>{'*'.repeat(10) + modem.partialImei}</td>
+          <tr>
+            <td className={'pt-0 pb-1'}><strong>IMEI:</strong></td>
+            <td className={'pt-0 pb-1'} align={'right'}>{'*'.repeat(10) + modem.partialImei}</td>
           </tr>
-          <tr className={'mt-0 mb-1 pt-0 pb-1'}>
-            <td><strong>Date:</strong></td>
-            <td align={'right'}>{date}</td>
+          <tr>
+            <td className={'pt-0 pb-1'}><strong>Date:</strong></td>
+            <td className={'pt-0 pb-1'} align={'right'}>{date}</td>
           </tr>
-          <tr className={'mt-0 mb-1 pt-0 pb-1'}>
-            <td><strong>Org:</strong></td>
-            <td align={'right'}>{modem.org}</td>
+          <tr>
+            <td className={'pt-0 pb-1'}><strong>Org:</strong></td>
+            <td className={'pt-0 pb-1'} align={'right'}>{modem.org}</td>
           </tr>
         </Table>
       </Card.Text>
