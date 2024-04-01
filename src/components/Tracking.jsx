@@ -55,6 +55,7 @@ import clockIcon from '../images/clockIcon.png'
 import chartIcon from '../images/chartIcon.png'
 
 import { encodeUID, extractDate, extractIMEI } from '../util/snowflake'
+import {Buffer} from "buffer";
 
 const logTime = () => moment().format('HH:mm:ss');
 
@@ -63,6 +64,15 @@ format.extend(String.prototype, {});
 
 const UPDATE_DELAY = 5000;
 const ACTIVE_DELAY = 30000;
+
+
+const compressUID = (uid) => {
+  let asBase64 = Buffer.from(uid.replaceAll('-', ''), 'hex').toString('base64');
+  // Buffer in node v12 does not support url-safe b64 encoding, so we need to manually format this
+  // as per https://datatracker.ietf.org/doc/html/rfc4648#section-5
+  return asBase64.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+}
+
 
 
 class Tracking extends Component {
@@ -109,7 +119,7 @@ class Tracking extends Component {
     chartRedrawKey: 0,
 
     // Select variables
-    selectedIMEI: null,
+    selectedModem: null,
     selectedFlight: null,
 
     // Check box
@@ -128,7 +138,10 @@ class Tracking extends Component {
     chartAnimation: true,
 
     groundElevation: false,
-    accordionKey: 'flight-select'
+    accordionKey: 'flight-select',
+
+    lastInputPins: null,
+    lastOutputPins: null
   };
   payloadMass;
   parachuteDiameter;
@@ -147,63 +160,54 @@ class Tracking extends Component {
     this.pinLogPrint = func;
   };
 
-  /*
-  *   [ IMEI Select Dropdown Callback ]
-  *
-  *   Fetches all flights associated with a given imei.
-  *   Response is a list of timestamps, converts data
-  *   to Select-able list with label format:
-  *     1: date
-  *     2: next date
-  *     etc
-  *
-  *   @param {Number} imei The imei to load
-  */
-  fetchFlightsFrom = (imei) => {
-    fetch('/meta/flights?imei={}'.format(imei))
-      .then(response => response.json())
-      .then(data => {
-        let allFlights = [];
-
-        // Build list of { value: datetime, label: 'X: Date'} items with
-        // datetime formatting of timestamps
-        for (let i = 0; i < data.length; i++) {
-          allFlights.push({
-            value: data[i],
-            label: '{}: {}'.format(i + 1, data[i])
-          })
-        }
-        allFlights.reverse();
-        this.setState({flightList: allFlights});
-      })
+  /**
+   * [ IMEI Select Dropdown Callback ]
+   *
+   * Fetches all flights associated with a given modem.
+   * Response is a list of objects:
+   *    [
+   *        {
+   *            date: {{ String }},
+   *            uid: {{ String }}
+   *        },
+   *        ...
+   *    ]
+   *
+   * @param {String} modem_name The modem name to load
+   * @returns {Promise<void>}
+   */
+  fetchFlightsFrom = async (modem_name) => {
+    try {
+      const res = await fetch(`/meta/flights?modem_name=${modem_name}`);
+      const data = await res.json();
+      if (res.status !== 200) {
+        console.log(`Error fetching flight list: ${data}`);
+      }
+      this.setState({flightList: data});
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   /**
    * Flight selection callback
-   * @param {String | moment} date
-   * @param {Number} imei
    * @param uid Optional search method
    * @returns {Promise<void>}
    */
-  fetchFlight = async (date, imei, uid) => {
+  fetchFlight = async (uid) => {
     try {
-      if (!uid) {
-        let datetime = moment.utc(date, 'YYYY-MM-DD');
-        uid = encodeUID(datetime, imei);
-        console.log(`Encoded uid ${uid} for date ${date}, imei ${imei}`);
-      }
-
-      console.log(`Requesting /flight?uid=${uid}`);
-      const res = await fetch('/flight?uid={}'.format(uid));
-      if (res.status !== 200) return;
+      const compressedUid = compressUID(uid);
+      console.log(`Requesting /flight?uid=${compressedUid} (${uid})`);
+      const res = await fetch(`/flight?uid=${compressedUid}`);
       const data = await res.json();
+      if (res.status !== 200) {
+        console.log(`Failed to request flight: ${data}`);
+        return;
+      }
 
       const flight = new Flight(data);
       const prediction = new LandingPrediction(flight, this.calculateVelocity);
       await prediction.buildAltitudeProfile();
-      /*await console.log('Altitude Profile:');
-      await console.log(prediction.altitudes);
-      await console.log(flight);*/
 
       const firstPoint = await flight.firstPoint();
       const lastPoint = await flight.lastPoint();
@@ -211,7 +215,6 @@ class Tracking extends Component {
       const durationSince = moment.duration(moment.utc().diff(lastPoint.datetime));
 
       // start updates
-      let interval = null;
       let active = false;
       let selected = firstPoint;
       clearInterval(this.updateInterval);
@@ -229,10 +232,10 @@ class Tracking extends Component {
         activeFlight: active,
         chartAnimation: true,
         groundElevation: false,
-        accordionKey: 'flight-data'
+        accordionKey: 'flight-data',
+        selectedModem: data.modem
       });
-      await this.props.history.push(`/tracking?uid=${uid}`);
-      return uid;
+      await this.props.history.push(`/tracking?uid=${compressedUid}`);
     } catch (e) {
       console.log(e);
     }
@@ -242,8 +245,6 @@ class Tracking extends Component {
     try {
       if (this.state.currentFlight) {
         let mostRecent = this.state.currentFlight.lastValidPoint();
-        //console.log(mostRecent);
-        //console.log(`most recent: ${mostRecent.datetime.unix()} or ${mostRecent.datetime.format('YYYY-MM-DD HH:mm:ss')}`);
         let result = await fetch('/update', {
           method: 'POST',
           headers: {
@@ -253,6 +254,10 @@ class Tracking extends Component {
           body: JSON.stringify({uid: mostRecent.uid, datetime: mostRecent.datetime.unix()})
         });
         let data = await result.json();
+        if (result.status !== 200) {
+          console.log(`Error fetching flight update: ${data}`);
+          return;
+        }
 
         if (data.update && data.result.length > 0) {
           // `Flight.add()` returns index added. Map the adds to an array and use the first
@@ -260,26 +265,39 @@ class Tracking extends Component {
           const updateIndicies = data.result.map(point => this.state.currentFlight.add(point));
           await this.state.landingPrediction.updateAltitudeProfile(updateIndicies[0], updateIndicies[updateIndicies.length - 1]);
 
-          if (data.pin_states) {
-            let inChange, outChange;
-            //console.log(`data: ${JSON.stringify(data)}`);
-            let newIn = data.pin_states.input_pins;
-            newIn = newIn > 15 ? newIn - 16 : newIn;
-            let newOut = data.pin_states.output_pins;
-            inChange = this.inputPins !== newIn ? !!(this.inputPins = newIn) : false;
-            outChange = this.outputPins !== newOut ? !!(this.outputPins = newOut) : false;
-
-            this.pinLogPrint(new LogItem(logTime(), (inChange || outChange) ? 'changed' : 'unchanged', `Input: ${this.inputPins} Output: ${this.outputPins}`));
+          let lastInputPins = this.state.lastInputPins;
+          let lastOutputPins = this.state.lastOutputPins;
+          let newIn = null;
+          let newOut = null;
+          let inChanged, outChanged;
+          for (const point of data.result) {
+            if (point.input_pins !== null) {
+              newIn = point.input_pins % 16;
+              inChanged = (lastInputPins !== newIn);
+              lastInputPins = newIn;
+            }
+            if (point.output_pins !== null) {
+              newOut = point.output_pins % 16;
+              outChanged = (lastOutputPins !== newOut);
+              lastOutputPins = newOut;
+            }
+            this.pinLogPrint(new LogItem(
+              logTime(),
+              (inChanged || outChanged) ? 'changed' : 'unchanged',
+              `Input: ${newIn} Output: ${newOut}`
+            ));
           }
 
           let elevation = false;
           if (data.elevation) elevation = data.elevation;
 
-          await this.setState({
+          this.setState({
             currentFlight: this.state.currentFlight,
             chartRedrawKey: Math.random(),
             chartAnimation: false,
-            groundElevation: elevation
+            groundElevation: elevation,
+            lastInputPins: lastInputPins,
+            lastOutputPins: lastOutputPins
           });
           await this.setSelectedPosition(this.state.currentFlight.data.length - 1);
         }
@@ -311,17 +329,18 @@ class Tracking extends Component {
 
   fetchActive = async () => {
     const res = await fetch('/meta/active');
-    if (res.status !== 200) return;
     const data = await res.json();
+    if (res.status !== 200) {
+      console.log(`Error fetching active flights: ${data}`)
+      return;
+    }
 
     if (data.status === 'active') {
       console.log('Active flight(s)');
       for (let partialPoint of data.points) {
-        partialPoint.imei = extractIMEI(partialPoint.uid);
-        partialPoint.start_date = extractDate(partialPoint.uid);
         partialPoint.datetime = moment.utc(partialPoint.datetime, 'YYYY-MM-DD[T]HH:mm:ss[Z]');
         partialPoint.callback = () => {
-          this.fetchFlight(partialPoint.start_date, partialPoint.imei, partialPoint.uid);
+          this.fetchFlight(partialPoint.uid);
         }
       }
       await this.setState({activeFlights: data.points});
@@ -332,12 +351,13 @@ class Tracking extends Component {
    * Change handler for IMEIs dropdown
    * @param {Object} change The new change
    */
-  imeiSelectChange = (change) => {
-    this.setState({selectedIMEI: change, selectedFlight: null});
-    if (change !== null) {
+  imeiSelectChange = async (change) => {
+    const modem = this.state.modemList.find((m) => (m.name === change.value));
+    this.setState({selectedModem: modem, selectedFlight: null});
+    if (modem !== undefined) {
       console.log('Selection chosen:');
-      console.log(change.value);
-      this.fetchFlightsFrom(change.value);
+      console.log(`(${modem.partialImei}) ${modem.name}`);
+      await this.fetchFlightsFrom(modem.name);
     }
   };
 
@@ -350,8 +370,8 @@ class Tracking extends Component {
     if (change !== null) {
       await console.log('Flight chosen:');
       await console.log(change.label);
-      if (this.state.selectedFlight !== null && this.state.selectedIMEI !== null) {
-        await this.fetchFlight(change.value, this.state.selectedIMEI.value);
+      if (this.state.selectedFlight !== null && this.state.selectedModem !== null) {
+        await this.fetchFlight(change.value);
       }
     }
   };
@@ -395,19 +415,13 @@ class Tracking extends Component {
   };
 
   async componentDidMount () {
-    //console.log('component did mount');
     await this.fetchIDList();
-    //console.log('id list fetched');
     await this.fetchActive();
-    //console.log('active fetched');
     this.activeInterval = setInterval(this.fetchActive, ACTIVE_DELAY);
     const params = queryString.parse(this.props.location.search);
-    //console.log(`Params: ${JSON.stringify(params)}`);
 
-    if (typeof params.uid === 'string' && params.uid.length > 0) {
-      await this.fetchFlight(null, null, params.uid);
-      let imei = extractIMEI(params.uid);
-      await this.setState({selectedIMEI: {value: imei, label: imei}})
+    if ('uid' in params && typeof params.uid === 'string' && params.uid.length > 0) {
+      await this.fetchFlight(params.uid);
     }
   }
 
@@ -447,7 +461,7 @@ class Tracking extends Component {
                   <Card.Body>
                     <h6>Select IMEI</h6>
                     <Select
-                      value={this.state.selectedIMEI}
+                      value={this.state.selectedModem}
                       onChange={this.imeiSelectChange}
                       options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
                       menuPortalTarget={document.querySelector('body')}
@@ -459,7 +473,7 @@ class Tracking extends Component {
                     <Select
                       value={this.state.selectedFlight}
                       onChange={this.flightSelectChange}
-                      options={this.state.flightList}
+                      options={this.state.flightList.map((x, index) => ({value: x.uid, label: `${index+1}: ${x.date}`})).reverse()}
                       menuPortalTarget={document.querySelector('body')}
                       isSearchable={true}
                       isDisabled={this.state.flightList.length < 1}
@@ -581,7 +595,7 @@ class Tracking extends Component {
                     {this.state.currentFlight === null && <Card.Text>Please select a flight.</Card.Text>}
                     {this.state.currentFlight &&
                     <SelectedFlightData
-                      imei={this.state.selectedIMEI && this.state.selectedIMEI.value}
+                      imei={this.state.selectedModem}
                       date={this.state.currentFlight.start_date.format('MMMM Do, YYYY')}
                       datetime={this.state.selectedPosition.datetime.format('YYYY-MM-DD HH:mm:ss')}
                       duration={moment.duration(this.state.selectedPosition.datetime.utc().diff(this.state.currentFlight.firstPoint().datetime.utc())).humanize()}
