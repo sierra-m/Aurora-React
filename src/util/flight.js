@@ -76,7 +76,7 @@ class FlightPoint {
   */
   constructor (fields, data) {
     let received = zip(fields, data);
-    this.uid = safe_get(received, 'uid', 0);
+    this.uid = safe_get(received, 'uid', "");
     this.datetime = safe_get(received, 'datetime', 0);
     this.latitude = safe_get(received, 'latitude', 0.00);
     this.longitude = safe_get(received, 'longitude', 0.00);
