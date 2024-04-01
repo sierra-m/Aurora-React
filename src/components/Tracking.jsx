@@ -141,10 +141,7 @@ class Tracking extends Component {
     chartAnimation: true,
 
     groundElevation: false,
-    accordionKey: 'flight-select',
-
-    lastInputPins: null,
-    lastOutputPins: null
+    accordionKey: 'flight-select'
   };
   payloadMass;
   parachuteDiameter;
@@ -290,9 +287,7 @@ class Tracking extends Component {
             currentFlight: this.state.currentFlight,
             chartRedrawKey: Math.random(),
             chartAnimation: false,
-            groundElevation: elevation,
-            lastInputPins: lastInputPins,
-            lastOutputPins: lastOutputPins
+            groundElevation: elevation
           });
           await this.setSelectedPosition(this.state.currentFlight.data.length - 1);
         }
