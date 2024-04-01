@@ -153,7 +153,7 @@ export default class LogWindow extends Component {
               type={"switch"}
               id={"autoscroll-switch"}
               label={`Autoscoll: ${this.state.autoscoll ? 'On' : 'Off'}`}
-              onClick={this.toggleSwitch()}
+              onClick={this.toggleSwitch}
               checked={this.state.autoscroll}
             />
           </Form>
