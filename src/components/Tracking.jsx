@@ -652,7 +652,7 @@ class Tracking extends Component {
                     <Tab.Pane eventKey="pin-states" className={'py-3'}>
                       <div className={'mt-3'}> </div>
                       <Card.Text>
-                        This log shows NAL Modem pin states for each time stamp.
+                        <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
                         <Alert variant={'info'}>
                           <em>Note:</em> Some flights may not have recorded pin states due to a storage error, this may be fixed
                           in future updates
