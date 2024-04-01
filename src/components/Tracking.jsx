@@ -459,9 +459,9 @@ class Tracking extends Component {
                 </Card.Header>
                 <Accordion.Collapse eventKey="flight-select">
                   <Card.Body>
-                    <h6>Select IMEI</h6>
+                    <h6>Select Modem</h6>
                     <Select
-                      value={this.state.selectedModem}
+                      value={this.state.selectedModem && `(${this.state.selectedModem.partialImei}) ${this.state.selectedModem.name}`}
                       onChange={this.imeiSelectChange}
                       options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
                       menuPortalTarget={document.querySelector('body')}
