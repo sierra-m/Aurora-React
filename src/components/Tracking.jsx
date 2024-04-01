@@ -118,9 +118,12 @@ class Tracking extends Component {
     // Change this to anything to redraw the altitude chart
     chartRedrawKey: 0,
 
-    // Select variables
+    // Select variables (option objects for select components)
+    selectedModemOption: null,
+    selectedFlightOption: null,
+
+    // Selected modem info (partial imei, org, name)
     selectedModem: null,
-    selectedFlight: null,
 
     // Check box
     useLandingPrediction: false,
@@ -353,7 +356,7 @@ class Tracking extends Component {
    */
   imeiSelectChange = async (change) => {
     const modem = this.state.modemList.find((m) => (m.name === change.value));
-    this.setState({selectedModem: modem, selectedFlight: null});
+    this.setState({selectedModem: modem, selectedModemOption: change, selectedFlightOption: null});
     if (modem !== undefined) {
       console.log('Selection chosen:');
       console.log(`(${modem.partialImei}) ${modem.name}`);
@@ -366,11 +369,11 @@ class Tracking extends Component {
    * @param {Object} change The new change
    */
   flightSelectChange = async (change) => {
-    await this.setState({selectedFlight: change});
+    await this.setState({selectedFlightOption: change});
     if (change !== null) {
       await console.log('Flight chosen:');
       await console.log(change.label);
-      if (this.state.selectedFlight !== null && this.state.selectedModem !== null) {
+      if (this.state.selectedFlightOption !== null && this.state.selectedModem !== null) {
         await this.fetchFlight(change.value);
       }
     }
@@ -461,7 +464,7 @@ class Tracking extends Component {
                   <Card.Body>
                     <h6>Select Modem</h6>
                     <Select
-                      value={this.state.selectedModem && `(${this.state.selectedModem.partialImei}) ${this.state.selectedModem.name}`}
+                      value={this.state.selectedModemOption}
                       onChange={this.imeiSelectChange}
                       options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
                       menuPortalTarget={document.querySelector('body')}
@@ -471,7 +474,7 @@ class Tracking extends Component {
                     />
                     <h6 className={'mt-2'}>Select Flight</h6>
                     <Select
-                      value={this.state.selectedFlight}
+                      value={this.state.selectedFlightOption}
                       onChange={this.flightSelectChange}
                       options={this.state.flightList.map((x, index) => ({value: x.uid, label: `${index+1}: ${x.date}`})).reverse()}
                       menuPortalTarget={document.querySelector('body')}
