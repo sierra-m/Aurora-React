@@ -78,19 +78,19 @@ const SelectedFlightData = ({
     <div>
       <Card.Text className={'pt-1'}>
         <Table borderless>
-          <tr className={'mt-1 mb-1'}>
+          <tr className={'mt-0 mb-1'}>
             <td><strong>Modem:</strong></td>
             <td align={'right'}>{modem.name}</td>
           </tr>
-          <tr className={'mt-1 mb-1'}>
+          <tr className={'mt-0 mb-1'}>
             <td><strong>IMEI:</strong></td>
             <td align={'right'}>{'*'.repeat(10) + modem.partialImei}</td>
           </tr>
-          <tr className={'mt-1 mb-1'}>
+          <tr className={'mt-0 mb-1'}>
             <td><strong>Date:</strong></td>
             <td align={'right'}>{date}</td>
           </tr>
-          <tr className={'mt-1 mb-1'}>
+          <tr className={'mt-0 mb-1'}>
             <td><strong>Org:</strong></td>
             <td align={'right'}>{modem.org}</td>
           </tr>
