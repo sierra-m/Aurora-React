@@ -27,6 +27,7 @@ import Card from 'react-bootstrap/Card'
 import '../style/logwindow.css'
 import Container from 'react-bootstrap/Container'
 import Badge from 'react-bootstrap/Badge'
+import Form from 'react-bootstrap/Form'
 import moment from 'moment'
 
 
@@ -147,11 +148,13 @@ export default class LogWindow extends Component {
           </Container>
         </Card.Text>
         <Card.Footer>
-          <Form.Check
-            type="switch"
-            id="autoscroll-switch"
-            label={`Autoscoll: ${this.state.autoscoll ? 'On' : 'Off'}`}
-          />
+          <Form>
+            <Form.Check
+              type="switch"
+              id="autoscroll-switch"
+              label={`Autoscoll: ${this.state.autoscoll ? 'On' : 'Off'}`}
+            />
+          </Form>
         </Card.Footer>
       </Card>
     )
