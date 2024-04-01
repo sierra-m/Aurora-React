@@ -611,11 +611,15 @@ class Tracking extends Component {
             </Accordion>
           </Column>
         </Row>
-        <Row>
-          <a href={'/tracking'} className={'link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'}>
-            ← Return to flights
-          </a>
-        </Row>
+        {this.state.currentFlight &&
+          <Row>
+            <Column>
+              <a href={'/tracking'}
+                 className={'text-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'}>
+                ← Return to flights
+              </a>
+            </Column>
+          </Row>}
         <Row>
           <Column lg={12} xl={12} md={12} sm={12} xs={12}>
             <Card className={'my-3'} style={{height: '36rem'}}>
