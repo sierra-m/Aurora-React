@@ -46,23 +46,23 @@ const getIconIMEI = (imei) => {
 };
 
 const SelectedFlightData = ({
-                              imei,
-                              date,
-                              datetime,
-                              duration,
-                              lat,
-                              long,
-                              vertical,
-                              ground,
-                              max_altitude,
-                              min_altitude,
-                              avg_ground,
-                              max_ground,
-                              max_vertical,
-                              altitude,
-                              elevation,
-                              downloadFlight
-                            }) => {
+    modem,
+    date,
+    datetime,
+    duration,
+    lat,
+    long,
+    vertical,
+    ground,
+    max_altitude,
+    min_altitude,
+    avg_ground,
+    max_ground,
+    max_vertical,
+    altitude,
+    elevation,
+    downloadFlight
+  }) => {
   const state = {
     locationControl: null
   };
@@ -76,10 +76,11 @@ const SelectedFlightData = ({
 
   return (
     <div>
-      <Image className={'pt-0 mt-0'} src={getIconIMEI(imei)} height={25}/>
       <Card.Text className={'pt-1'}>
-        <strong>IMEI: </strong>{imei}<br/>
-        <strong>Date: </strong>{date}
+        <strong>Modem: </strong>{modem.name}<br/>
+        <strong>IMEI: </strong>{'*'.repeat(10) + modem.partialImei}<br/>
+        <strong>Date: </strong>{date}<br/>
+        <strong>Organization:</strong>{modem.org}
       </Card.Text>
       <hr/>
 
@@ -159,17 +160,13 @@ const SelectedFlightData = ({
   )
 };
 
-const ActiveFlight = ({uid, start_date, imei, datetime, callback}) => {
-  /*const clickFlight = () => {
-    console.log(`imei: ${imei} typeof date: ${typeof start_date} date: ${start_date}`);
-    callback(imei, start_date);
-  };*/
-
+const ActiveFlight = ({uid, start_date, modem, datetime, callback}) => {
   return (
-    <a style={{cursor: 'pointer'}} onClick={() => callback()}>
+    <a style={{cursor: 'pointer'}} onClick={callback}>
       <Card className="card-item quick-shadow">
         <Card.Body>
-          <Card.Title>IMEI: {imei}</Card.Title>
+          <Card.Title>Modem: {`${modem.name} (${modem.partialImei})`}</Card.Title>
+          <Card.Subtitle>Org: {modem.org}</Card.Subtitle>
           <Card.Text>
             UID: {uid}<br/>
             Start Date: {start_date.format('MMMM Do[,] YYYY')} UTC<br/>
