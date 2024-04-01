@@ -103,7 +103,7 @@ export default class LogWindow extends Component {
     this.setState({items: [], lastInputPins: null, lastOutputPins: null});
   }
 
-  toggleSwitch () {
+  toggleCheck () {
     this.setState({autoscroll: !this.state.autoscroll})
   }
 
@@ -150,10 +150,10 @@ export default class LogWindow extends Component {
         <Card.Footer>
           <Form>
             <Form.Check
-              type={"switch"}
-              id={"autoscroll-switch"}
-              label={`Autoscoll: ${this.state.autoscoll ? 'On' : 'Off'}`}
-              onClick={this.toggleSwitch}
+              type={"checkbox"}
+              id={"autoscroll-check"}
+              label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
+              onClick={this.toggleCheck}
               checked={this.state.autoscroll}
             />
           </Form>
