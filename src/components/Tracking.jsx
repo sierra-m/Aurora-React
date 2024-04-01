@@ -595,7 +595,7 @@ class Tracking extends Component {
                     {this.state.currentFlight === null && <Card.Text>Please select a flight.</Card.Text>}
                     {this.state.currentFlight &&
                     <SelectedFlightData
-                      imei={this.state.selectedModem}
+                      modem={this.state.selectedModem}
                       date={this.state.currentFlight.start_date.format('MMMM Do, YYYY')}
                       datetime={this.state.selectedPosition.datetime.format('YYYY-MM-DD HH:mm:ss')}
                       duration={moment.duration(this.state.selectedPosition.datetime.utc().diff(this.state.currentFlight.firstPoint().datetime.utc())).humanize()}
