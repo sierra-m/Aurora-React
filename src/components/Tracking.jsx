@@ -612,8 +612,13 @@ class Tracking extends Component {
           </Column>
         </Row>
         <Row>
+          <a href={'/tracking'} className={'link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'}>
+            ← Return to flights
+          </a>
+        </Row>
+        <Row>
           <Column lg={12} xl={12} md={12} sm={12} xs={12}>
-            <Card className={'my-3'} style={{height: '34rem'}}>
+            <Card className={'my-3'} style={{height: '36rem'}}>
               <Card.Body style={{maxHeight: '530px'}}>
                 <Tab.Container id="data-tabs" defaultActiveKey="altitude">
                   <Nav justify variant="pills">

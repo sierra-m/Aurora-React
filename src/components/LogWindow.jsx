@@ -51,9 +51,9 @@ class LogItem {
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
         <samp> | Input: </samp>
-        <ColorSamp color={(this.inputPins === null) ? '#ab7b00' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
+        <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
-        <ColorSamp color={(this.outputPins === null) ? '#ab7b00' : '#006dbd'}>{`${this.outputPins}`}</ColorSamp>
+        <ColorSamp color={(this.outputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.outputPins}`}</ColorSamp>
         {'\n'}
       </div>
     )
