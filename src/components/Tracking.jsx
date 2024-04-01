@@ -75,8 +75,8 @@ class Tracking extends Component {
   /*
   *   STATE
   *   -----
-  *   imeiList: `list`
-  *   |   list of IMEIs
+  *   modemList: `list`
+  *   |   list of modem objects
   *   flightList: `list`
   *   |   list of flights under one imei
   *   currentFlight: :class:`Flight`
@@ -84,7 +84,7 @@ class Tracking extends Component {
   *
   */
   state = {
-    imeiList: [],
+    modemList: [],
     flightList: [],
 
     // Current flight selected by dropdowns
@@ -296,14 +296,14 @@ class Tracking extends Component {
    */
   fetchIDList = async () => {
     try {
-      const res = await fetch('/meta/imeis');
+      const res = await fetch('/meta/modems');
       const data = await res.json();
-
-      let imeis = [];
-      for (let i = 0; i < data.length; i++) {
-        imeis.push({value: data[i], label: data[i]})
+      if (res.status !== 200) {
+        console.log(`Error fetching modems: ${data}`);
+        return;
       }
-      await this.setState({imeiList: imeis});
+
+      await this.setState({modemList: data});
     } catch (e) {
       console.log(e)
     }
@@ -449,7 +449,7 @@ class Tracking extends Component {
                     <Select
                       value={this.state.selectedIMEI}
                       onChange={this.imeiSelectChange}
-                      options={this.state.imeiList}
+                      options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
                       menuPortalTarget={document.querySelector('body')}
                       isSearchable={true}
                       isClearable={true}
