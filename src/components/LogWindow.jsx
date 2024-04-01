@@ -50,7 +50,10 @@ class LogItem {
         <ColorSamp color={'#d300a4'}>[{this.time}] </ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
-        <samp> | {`Input: ${this.inputPins} Output: ${this.outputPins}`}</samp>
+        <samp> | Input: </samp>
+        <ColorSamp color={(this.inputPins === null) ? '#ab7b00' : '#006dbd'}>{this.inputPins}</ColorSamp>
+        <samp>, Output: </samp>
+        <ColorSamp color={(this.outputPins === null) ? '#ab7b00' : '#006dbd'}>{this.outputPins}</ColorSamp>
         {'\n'}
       </div>
     )
