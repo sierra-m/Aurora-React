@@ -594,7 +594,7 @@ class Tracking extends Component {
                 </Card.Header>
                 <Accordion.Collapse eventKey="flight-data">
                   <Card.Body style={{overflowY: 'auto', height: '45vh', maxHeight: '280px'}}>
-                    <Card.Title className={'mb-1'}>Selected flight</Card.Title>
+                    <Card.Title className={'mb-1'}>Selected Flight</Card.Title>
                     {this.state.currentFlight === null && <Card.Text>Please select a flight.</Card.Text>}
                     {this.state.currentFlight &&
                     <SelectedFlightData
