@@ -25,11 +25,44 @@
 import React, {Component} from 'react'
 import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow, Polyline, Circle} from "react-google-maps"
 import {GOOGLE_MAPS_KEY} from '../api_keys'
+import Image from 'react-bootstrap/Image'
 
 import greenBalloon from '../images/greenBalloon.png'
 import parachuteIcon from '../images/parachuteIcon45.png'
 import greenIcon from '../images/greenIcon.png'
 import orangeIcon from '../images/orangeIcon.png'
+
+import balloonIcon1Diag from '../images/aurora_balloon_1diag.svg'
+import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
+import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
+import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
+import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
+import balloonIconStart from '../images/aurora_balloon_star.svg'
+
+
+const balloonIconSvgs = [
+  balloonIcon1Diag,
+  balloonIcon2Diag,
+  balloonIcon3Diag,
+  balloonIconHorizArcs,
+  balloonIconVertArcs,
+  balloonIconStart
+];
+
+
+const balloonColors = [
+  '#0000FF',
+  '#9932CC',
+  '#228B22',
+  '#DC143C',
+  '#1E90FF',
+  '#FFA500',
+  '#FF4500',
+  '#FA8072',
+  '#C71585',
+  '#4B0082'
+];
+
 
 const format = require('string-format');
 format.extend(String.prototype, {});
@@ -45,6 +78,12 @@ const googleMapsAPI_URL = 'https://maps.googleapis.com/maps/api/js?v=3&key={}&li
 const dispMetersFeet = (number) => (
   '{} m ({} ft)'.format(number, (number * 3.28084).toFixed(2))
 );
+
+const calcGroupSelect = (uid, digits, groupSize) => (parseInt(uid.slice(-digits), 16) % groupSize);
+
+const chooseRandomColor = (uid) => (balloonColors[calcGroupSelect(uid, 1, balloonColors.length)]);
+
+const chooseRandomSvg = (uid) => (balloonIconSvgs[calcGroupSelect(uid, 2, balloonIconSvgs.length)]);
 
 class InfoMarker extends React.PureComponent {
   /*
@@ -219,12 +258,18 @@ class BaseMap extends Component {
         }
         {this.props.selectedPosition &&
         <InfoMarker position={this.props.selectedPosition} altitude={dispMetersFeet(this.props.selectedPosition.alt)}
-                    icon={greenBalloon} updateLastWindowClose={this.handleLastWindowClose}
+                    icon={<Image
+                      src={chooseRandomSvg(this.props.selectedPosition.uid)}
+                      style={{height: 48}}
+                      alt={'balloon icon'}/>} updateLastWindowClose={this.handleLastWindowClose}
         />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker position={{lat: partial.latitude, lng: partial.longitude}}
-                      icon={greenBalloon} onClick={partial.callback}/>
+                      icon={<Image
+                        src={chooseRandomSvg(partial.uid)}
+                        style={{height: 48}}
+                        alt={'balloon icon'}/>} onClick={partial.callback}/>
         ))}
         {this.props.landingZone &&
         <Circle
