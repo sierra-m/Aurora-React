@@ -94,7 +94,7 @@ export default class LogWindow extends Component {
       lastOutputPins = newOut;
     }
     const logItem = new LogItem(
-      datetime.format('YYYY-MM-DD HH:mm:ss'),
+      datetime,
       (inChanged || outChanged) ? 'changed' : 'unchanged',
       newIn,
       newOut
