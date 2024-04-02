@@ -290,8 +290,9 @@ class Tracking extends Component {
             chartRedrawKey: Math.random(),
             chartAnimation: false,
             groundElevation: elevation
+          }, async () => {
+            await this.setSelectedPosition(this.state.currentFlight.data.length - 1);
           });
-          await this.setSelectedPosition(this.state.currentFlight.data.length - 1);
         }
       }
     } catch (e) {
@@ -615,8 +616,8 @@ class Tracking extends Component {
           <Row>
             <Column>
               <a href={'/tracking'}
-                 className={'text-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'}>
-                ← Return to flights
+                 className={'text-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}>
+                ← Return to active flights
               </a>
             </Column>
           </Row>}
