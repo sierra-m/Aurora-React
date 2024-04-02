@@ -63,6 +63,19 @@ const balloonColors = [
   '#4B0082'
 ];
 
+const balloonColorTransforms = [
+  {filter: `invert(8%) sepia(100%) saturate(7453%) hue-rotate(248deg) brightness(93%) contrast(142%)`},
+  {filter: `invert(28%) sepia(84%) saturate(1833%) hue-rotate(263deg) brightness(83%) contrast(100%)`},
+  {filter: `invert(34%) sepia(83%) saturate(479%) hue-rotate(70deg) brightness(105%) contrast(93%)`},
+  {filter: `invert(28%) sepia(90%) saturate(7192%) hue-rotate(340deg) brightness(88%) contrast(96%);`},
+  {filter: `invert(42%) sepia(87%) saturate(2378%) hue-rotate(193deg) brightness(103%) contrast(101%)`},
+  {filter: `invert(63%) sepia(59%) saturate(1083%) hue-rotate(357deg) brightness(99%) contrast(107%)`},
+  {filter: `invert(28%) sepia(74%) saturate(3343%) hue-rotate(5deg) brightness(106%) contrast(102%)`},
+  {filter: `invert(63%) sepia(69%) saturate(523%) hue-rotate(313deg) brightness(92%) contrast(115%)`},
+  {filter: `invert(20%) sepia(98%) saturate(2439%) hue-rotate(304deg) brightness(85%) contrast(104%)`},
+  {filter: `invert(15%) sepia(53%) saturate(3657%) hue-rotate(264deg) brightness(88%) contrast(130%)`},
+]
+
 
 const format = require('string-format');
 format.extend(String.prototype, {});
@@ -82,6 +95,8 @@ const dispMetersFeet = (number) => (
 const calcGroupSelect = (uid, digits, groupSize) => (parseInt(uid.slice(-digits), 16) % groupSize);
 
 const chooseRandomColor = (uid) => (balloonColors[calcGroupSelect(uid, 1, balloonColors.length)]);
+
+const chooseRandomColorFilter = (uid) => (balloonColorTransforms[calcGroupSelect(uid, 1, balloonColors.length)]);
 
 const chooseRandomSvg = (uid) => (balloonIconSvgs[calcGroupSelect(uid, 2, balloonIconSvgs.length)]);
 
@@ -268,21 +283,27 @@ class BaseMap extends Component {
         />
         }
         {this.props.selectedPosition &&
-        <InfoMarker position={this.props.selectedPosition.coords()} altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-                    icon={{
-                      url: chooseRandomSvg(this.props.selectedPosition.uid),
-                      scale: 0.3,
-                      strokeColor: chooseRandomColor(this.props.selectedPosition.uid)
-                    }} updateLastWindowClose={this.handleLastWindowClose}
+        <InfoMarker
+          position={this.props.selectedPosition.coords()}
+          altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
+          icon={{
+            url: chooseRandomSvg(this.props.selectedPosition.uid),
+            scaledSize: {height: 48}
+          }}
+          style={chooseRandomColorFilter(this.props.selectedPosition.uid)}
+          updateLastWindowClose={this.handleLastWindowClose}
         />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
-          <Marker position={{lat: partial.latitude, lng: partial.longitude}}
-                      icon={{
-                        url: chooseRandomSvg(partial.uid),
-                        scale: 0.3,
-                        strokeColor: chooseRandomColor(partial.uid)
-                      }} onClick={partial.callback}/>
+          <Marker
+            position={{lat: partial.latitude, lng: partial.longitude}}
+            icon={{
+              url: chooseRandomSvg(partial.uid),
+              scaledSize: {height: 48}
+            }}
+            style={chooseRandomColorFilter(partial.uid)}
+            onClick={partial.callback}
+          />
         ))}
         {this.props.landingZone &&
         <Circle
