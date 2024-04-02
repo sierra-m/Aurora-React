@@ -32,12 +32,12 @@ import parachuteIcon from '../images/parachuteIcon45.png'
 import greenIcon from '../images/greenIcon.png'
 import orangeIcon from '../images/orangeIcon.png'
 
-import {ReactComponent as balloonIcon1Diag} from '../images/aurora_balloon_1diag.svg'
-import {ReactComponent as balloonIcon2Diag} from '../images/aurora_balloon_2diag.svg'
-import {ReactComponent as balloonIcon3Diag} from '../images/aurora_balloon_3diag.svg'
-import {ReactComponent as balloonIconHorizArcs} from '../images/aurora_balloon_horiz_arcs.svg'
-import {ReactComponent as balloonIconVertArcs} from '../images/aurora_balloon_vert_arcs.svg'
-import {ReactComponent as balloonIconStart} from '../images/aurora_balloon_star.svg'
+import balloonIcon1Diag from '../images/aurora_balloon_1diag.svg'
+import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
+import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
+import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
+import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
+import balloonIconStart from '../images/aurora_balloon_star.svg'
 
 
 const balloonIconSvgs = [
@@ -269,12 +269,18 @@ class BaseMap extends Component {
         }
         {this.props.selectedPosition &&
         <InfoMarker position={this.props.selectedPosition} altitude={dispMetersFeet(this.props.selectedPosition.alt)}
-                    icon={<BalloonIcon icon={chooseRandomSvg(this.props.selectedPosition.uid)}/>} updateLastWindowClose={this.handleLastWindowClose}
+                    icon={{
+                      url: chooseRandomSvg(this.props.selectedPosition.uid).default,
+                      scale: 1
+                    }} updateLastWindowClose={this.handleLastWindowClose}
         />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker position={{lat: partial.latitude, lng: partial.longitude}}
-                      icon={<BalloonIcon icon={chooseRandomSvg(partial.uid)}/>} onClick={partial.callback}/>
+                      icon={{
+                        url: chooseRandomSvg(partial.uid).default,
+                        scale: 1
+                      }} onClick={partial.callback}/>
         ))}
         {this.props.landingZone &&
         <Circle
