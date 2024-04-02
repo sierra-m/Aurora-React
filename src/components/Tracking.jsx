@@ -434,7 +434,7 @@ class Tracking extends Component {
                 startPosition={this.state.currentFlight && this.state.currentFlight.firstValidPoint().coords()}
                 endPosition={this.state.currentFlight && !this.state.activeFlight && this.state.currentFlight.lastValidPoint().coords()}
                 defaultCenter={this.state.currentFlight && this.state.selectedPosition.coords()}
-                selectedPosition={this.state.selectedPosition && this.state.selectedPosition.coords()}
+                selectedPosition={this.state.selectedPosition}
                 landingZone={Math.random() && this.state.landingZone}
                 selectPosition={this.setSelectedPosition}
                 activeFlights={this.state.activeFlights}
