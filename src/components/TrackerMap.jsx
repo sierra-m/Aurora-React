@@ -270,7 +270,7 @@ class BaseMap extends Component {
         {this.props.selectedPosition &&
         <InfoMarker position={this.props.selectedPosition.coords()} altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
                     icon={{
-                      url: chooseRandomSvg(this.props.selectedPosition.uid).default,
+                      url: chooseRandomSvg(this.props.selectedPosition.uid),
                       scale: 1
                     }} updateLastWindowClose={this.handleLastWindowClose}
         />
@@ -278,7 +278,7 @@ class BaseMap extends Component {
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker position={{lat: partial.latitude, lng: partial.longitude}}
                       icon={{
-                        url: chooseRandomSvg(partial.uid).default,
+                        url: chooseRandomSvg(partial.uid),
                         scale: 1
                       }} onClick={partial.callback}/>
         ))}
