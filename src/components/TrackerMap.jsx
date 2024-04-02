@@ -271,7 +271,8 @@ class BaseMap extends Component {
         <InfoMarker position={this.props.selectedPosition.coords()} altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
                     icon={{
                       url: chooseRandomSvg(this.props.selectedPosition.uid),
-                      scale: 1
+                      scale: 0.3,
+                      strokeColor: chooseRandomColor(this.props.selectedPosition.uid)
                     }} updateLastWindowClose={this.handleLastWindowClose}
         />
         }
@@ -279,7 +280,8 @@ class BaseMap extends Component {
           <Marker position={{lat: partial.latitude, lng: partial.longitude}}
                       icon={{
                         url: chooseRandomSvg(partial.uid),
-                        scale: 1
+                        scale: 0.3,
+                        strokeColor: chooseRandomColor(partial.uid)
                       }} onClick={partial.callback}/>
         ))}
         {this.props.landingZone &&
