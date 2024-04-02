@@ -288,7 +288,7 @@ class BaseMap extends Component {
           altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
           icon={{
             url: chooseRandomSvg(this.props.selectedPosition.uid),
-            scaledSize: {height: 48}
+            scaledSize: {width: 34, height: 48}
           }}
           style={chooseRandomColorFilter(this.props.selectedPosition.uid)}
           updateLastWindowClose={this.handleLastWindowClose}
@@ -299,7 +299,7 @@ class BaseMap extends Component {
             position={{lat: partial.latitude, lng: partial.longitude}}
             icon={{
               url: chooseRandomSvg(partial.uid),
-              scaledSize: {height: 48}
+              scaledSize: {width: 34, height: 48}
             }}
             style={chooseRandomColorFilter(partial.uid)}
             onClick={partial.callback}
