@@ -193,6 +193,22 @@ class InfoMarker extends React.PureComponent {
             <strong>Altitude:</strong> {this.props.altitude}
           </p>
         </InfoWindow>}
+      </Marker>
+    )
+  }
+}
+
+class BalloonInfoMarker extends InfoMarker {
+  render() {
+    return (
+      <Marker position={this.props.position} onClick={this.onMarkerClicked}>
+        {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
+          <p>
+            <strong>Latitude:</strong> {this.props.position.lat}<br/>
+            <strong>Longitude:</strong> {this.props.position.lng}<br/>
+            <strong>Altitude:</strong> {this.props.altitude}
+          </p>
+        </InfoWindow>}
         <StarBalloonIcon uid={this.props.uid}/>
       </Marker>
     )
@@ -294,7 +310,7 @@ class BaseMap extends Component {
         />
         }
         {this.props.selectedPosition &&
-          <InfoMarker
+          <BalloonInfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
             uid={this.props.selectedPosition.uid}
