@@ -280,7 +280,6 @@ class BaseMap extends Component {
   };
 
   render() {
-    const selectedBalloonIcon = this.props.selectedPosition && StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid));
     return (
       <GoogleMap
         defaultZoom={4}
