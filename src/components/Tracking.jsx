@@ -331,7 +331,9 @@ class Tracking extends Component {
     if (data.status === 'active') {
       console.log('Active flight(s)');
       for (let partialPoint of data.points) {
+        // idk why these two are sent differently
         partialPoint.datetime = moment.utc(partialPoint.datetime, 'YYYY-MM-DD[T]HH:mm:ss[Z]');
+        partialPoint.start_date = moment.unix(partialPoint.start_date).format('YYYY-MM-DD HH:mm:ss');
         partialPoint.compressed_uid = compressUID(partialPoint.uid);
         partialPoint.callback = () => {
           this.fetchFlight(partialPoint.uid);
