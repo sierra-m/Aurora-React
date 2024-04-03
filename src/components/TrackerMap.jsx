@@ -114,14 +114,14 @@ const balloonIconList = [
   balloonIconVertArcsPurple
 ]
 
-const balloonIconSvgs = [
-  balloonIcon1Diag,
-  balloonIcon2Diag,
-  balloonIcon3Diag,
-  balloonIconHorizArcs,
-  balloonIconVertArcs,
-  balloonIconStar
-];
+// const balloonIconSvgs = [
+//   balloonIcon1Diag,
+//   balloonIcon2Diag,
+//   balloonIcon3Diag,
+//   balloonIconHorizArcs,
+//   balloonIconVertArcs,
+//   balloonIconStar
+// ];
 
 
 const balloonColors = [
