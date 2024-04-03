@@ -316,7 +316,7 @@ class BaseMap extends Component {
           <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={"data:image/svg+xml;utf8,<svg><rect stroke='black' fill='black' width='50' height='25'/></svg>"}
+            icon={`data:image/svg+xml;utf8,<svg><rect stroke='black' fill='black' width='50' height='25' xmlns="http://www.w3.org/2000/svg"/></svg>`}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
