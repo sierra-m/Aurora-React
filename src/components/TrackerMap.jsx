@@ -32,24 +32,17 @@ import parachuteIcon from '../images/parachuteIcon45.png'
 import greenIcon from '../images/greenIcon.png'
 import orangeIcon from '../images/orangeIcon.png'
 
-import balloonIcon1Diag from '../images/aurora_balloon_1diag.svg'
-import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
-import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
-import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
-import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
-import balloonIconStar from '../images/aurora_balloon_star.svg'
-
 import {chooseRandomIcon} from "../util/balloonIcons";
 
 
-const balloonIconSvgs = [
-  balloonIcon1Diag,
-  balloonIcon2Diag,
-  balloonIcon3Diag,
-  balloonIconHorizArcs,
-  balloonIconVertArcs,
-  balloonIconStar
-];
+// const balloonIconSvgs = [
+//   balloonIcon1Diag,
+//   balloonIcon2Diag,
+//   balloonIcon3Diag,
+//   balloonIconHorizArcs,
+//   balloonIconVertArcs,
+//   balloonIconStar
+// ];
 
 
 const balloonColors = [
@@ -100,7 +93,7 @@ const chooseRandomColor = (uid) => (balloonColors[calcGroupSelect(uid, 1, balloo
 
 const chooseRandomColorFilter = (uid) => (balloonColorTransforms[calcGroupSelect(uid, 1, balloonColors.length)]);
 
-const chooseRandomSvg = (uid) => (balloonIconSvgs[calcGroupSelect(uid, 2, balloonIconSvgs.length)]);
+//const chooseRandomSvg = (uid) => (balloonIconSvgs[calcGroupSelect(uid, 2, balloonIconSvgs.length)]);
 
 class BalloonIcon extends React.Component {
   render() {
