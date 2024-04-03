@@ -182,7 +182,7 @@ class Tracking extends Component {
    */
   fetchFlightsFrom = async (modem_name) => {
     try {
-      const res = await fetch(`/meta/flights?modem_name=${modem_name}`);
+      const res = await fetch(`/api/meta/flights?modem_name=${modem_name}`);
       const data = await res.json();
       if (res.status !== 200) {
         console.log(`Error fetching flight list: ${data}`);
@@ -201,8 +201,8 @@ class Tracking extends Component {
   fetchFlight = async (uid) => {
     try {
       const compressedUid = compressUID(uid);
-      console.log(`Requesting /flight?uid=${compressedUid} (${uid})`);
-      const res = await fetch(`/flight?uid=${compressedUid}`);
+      console.log(`Requesting /api/flight?uid=${compressedUid} (${uid})`);
+      const res = await fetch(`/api/flight?uid=${compressedUid}`);
       const data = await res.json();
       if (res.status !== 200) {
         console.log(`Failed to request flight: ${data}`);
@@ -258,7 +258,7 @@ class Tracking extends Component {
     try {
       if (this.state.currentFlight) {
         let mostRecent = this.state.currentFlight.lastValidPoint();
-        let result = await fetch('/update', {
+        let result = await fetch('/api/update', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -307,7 +307,7 @@ class Tracking extends Component {
    */
   fetchIDList = async () => {
     try {
-      const res = await fetch('/meta/modems');
+      const res = await fetch('/api/meta/modems');
       const data = await res.json();
       if (res.status !== 200) {
         console.log(`Error fetching modems: ${data}`);
@@ -321,7 +321,7 @@ class Tracking extends Component {
   };
 
   fetchActive = async () => {
-    const res = await fetch('/meta/active');
+    const res = await fetch('/api/meta/active');
     const data = await res.json();
     if (res.status !== 200) {
       console.log(`Error fetching active flights: ${data}`)
@@ -403,7 +403,7 @@ class Tracking extends Component {
   downloadFlight = async (format) => {
     const uid = this.state.currentFlight.firstPoint().uid;
     try {
-      window.open(`/flight?uid=${uid}&format=${format}`)
+      window.open(`/api/flight?uid=${uid}&format=${format}`)
     } catch (e) {
       alert(`File fetch failed: ${e}`)
     }
