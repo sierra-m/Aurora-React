@@ -39,6 +39,8 @@ import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
 import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
 import balloonIconStar from '../images/aurora_balloon_star.svg'
 
+import {StarBalloonIcon} from "../util/balloonIcons";
+
 
 const balloonIconSvgs = [
   balloonIcon1Diag,
@@ -111,15 +113,15 @@ class BalloonIcon extends React.Component {
   }
 }
 
-class StarBalloonIcon extends React.Component {
-  render() {
-    //const svg = this.props.svg;
-    const {filter} = chooseRandomColorFilter(this.props.uid);
-    return (
-      <img src={balloonIconStar} alt={'star balloon icon'} style={{height: 48, width: 34, filter: filter}}/>
-    )
-  }
-}
+// class StarBalloonIcon extends React.Component {
+//   render() {
+//     //const svg = this.props.svg;
+//     const {filter} = chooseRandomColorFilter(this.props.uid);
+//     return (
+//       <img src={balloonIconStar} alt={'star balloon icon'} style={{height: 48, width: 34, filter: filter}}/>
+//     )
+//   }
+// }
 
 class InfoMarker extends React.PureComponent {
   /*
@@ -198,22 +200,22 @@ class InfoMarker extends React.PureComponent {
   }
 }
 
-class BalloonInfoMarker extends InfoMarker {
-  render() {
-    return (
-      <OverlayView position={this.props.position} onClick={this.onMarkerClicked}>
-        {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
-          <p>
-            <strong>Latitude:</strong> {this.props.position.lat}<br/>
-            <strong>Longitude:</strong> {this.props.position.lng}<br/>
-            <strong>Altitude:</strong> {this.props.altitude}
-          </p>
-        </InfoWindow>}
-        <StarBalloonIcon uid={this.props.uid}/>
-      </OverlayView>
-    )
-  }
-}
+// class BalloonInfoMarker extends InfoMarker {
+//   render() {
+//     return (
+//       <OverlayView position={this.props.position} onClick={this.onMarkerClicked}>
+//         {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
+//           <p>
+//             <strong>Latitude:</strong> {this.props.position.lat}<br/>
+//             <strong>Longitude:</strong> {this.props.position.lng}<br/>
+//             <strong>Altitude:</strong> {this.props.altitude}
+//           </p>
+//         </InfoWindow>}
+//         <StarBalloonIcon uid={this.props.uid}/>
+//       </OverlayView>
+//     )
+//   }
+// }
 
 class BaseMap extends Component {
   /*
@@ -310,10 +312,13 @@ class BaseMap extends Component {
         />
         }
         {this.props.selectedPosition &&
-          <BalloonInfoMarker
+          <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            uid={this.props.selectedPosition.uid}
+            icon={{
+              url: StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid)),
+              scaledSize: {width: 34, height: 48}
+            }}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
