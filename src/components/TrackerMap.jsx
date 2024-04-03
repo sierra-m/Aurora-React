@@ -39,7 +39,7 @@ import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
 import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
 import balloonIconStar from '../images/aurora_balloon_star.svg'
 
-import {StarBalloonIconURI} from "../util/balloonIcons";
+import {chooseRandomIcon} from "../util/balloonIcons";
 
 
 const balloonIconSvgs = [
@@ -280,7 +280,6 @@ class BaseMap extends Component {
   };
 
   render() {
-    const balloonURI = this.props.selectedPosition && StarBalloonIconURI(chooseRandomColor(this.props.selectedPosition.uid));
     return (
       <GoogleMap
         defaultZoom={4}
@@ -316,7 +315,10 @@ class BaseMap extends Component {
           <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={`data:image/svg+xml;utf8,<svg><rect stroke='black' fill='black' width='50' height='25' xmlns="http://www.w3.org/2000/svg"/></svg>`}
+            icon={{
+              url: chooseRandomIcon(this.props.selectedPosition.uid),
+              scaledSize: {width: 34, height: 48}
+            }}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
@@ -324,10 +326,9 @@ class BaseMap extends Component {
           <Marker
             position={{lat: partial.latitude, lng: partial.longitude}}
             icon={{
-              url: chooseRandomSvg(partial.uid),
+              url: chooseRandomIcon(partial.uid),
               scaledSize: {width: 34, height: 48}
             }}
-            style={chooseRandomColorFilter(partial.uid)}
             onClick={partial.callback}
           />
         ))}

@@ -1,67 +1,88 @@
 
-import fs from 'fs';
+import balloonIcon2DiagCrimson from '../images/balloon/aurora_balloon_2diag_crimson.svg'
+import balloonIcon2DiagDarkBlue from '../images/balloon/aurora_balloon_2diag_dark_blue.svg'
+import balloonIcon2DiagGreen from '../images/balloon/aurora_balloon_2diag_green.svg'
+import balloonIcon2DiagLightBlue from '../images/balloon/aurora_balloon_2diag_light_blue.svg'
+import balloonIcon2DiagMagenta from '../images/balloon/aurora_balloon_2diag_magenta.svg'
+import balloonIcon2DiagOrange from '../images/balloon/aurora_balloon_2diag_orange.svg'
+import balloonIcon2DiagPurple from '../images/balloon/aurora_balloon_2diag_purple.svg'
 
+import balloonIcon3DiagCrimson from '../images/balloon/aurora_balloon_3diag_crimson.svg'
+import balloonIcon3DiagDarkBlue from '../images/balloon/aurora_balloon_3diag_dark_blue.svg'
+import balloonIcon3DiagGreen from '../images/balloon/aurora_balloon_3diag_green.svg'
+import balloonIcon3DiagLightBlue from '../images/balloon/aurora_balloon_3diag_light_blue.svg'
+import balloonIcon3DiagMagenta from '../images/balloon/aurora_balloon_3diag_magenta.svg'
+import balloonIcon3DiagOrange from '../images/balloon/aurora_balloon_3diag_orange.svg'
+import balloonIcon3DiagPurple from '../images/balloon/aurora_balloon_3diag_purple.svg'
 
-import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
-import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
-import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
-import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
-import balloonIconStar from '../images/aurora_balloon_star.svg'
+import balloonIconHorizArcsCrimson from '../images/balloon/aurora_balloon_horiz_arcs_crimson.svg'
+import balloonIconHorizArcsDarkBlue from '../images/balloon/aurora_balloon_horiz_arcs_dark_blue.svg'
+import balloonIconHorizArcsGreen from '../images/balloon/aurora_balloon_horiz_arcs_green.svg'
+import balloonIconHorizArcsLightBlue from '../images/balloon/aurora_balloon_horiz_arcs_light_blue.svg'
+import balloonIconHorizArcsMagenta from '../images/balloon/aurora_balloon_horiz_arcs_magenta.svg'
+import balloonIconHorizArcsOrange from '../images/balloon/aurora_balloon_horiz_arcs_orange.svg'
+import balloonIconHorizArcsPurple from '../images/balloon/aurora_balloon_horiz_arcs_purple.svg'
 
+import balloonIconStarCrimson from '../images/balloon/aurora_balloon_star_crimson.svg'
+import balloonIconStarDarkBlue from '../images/balloon/aurora_balloon_star_dark_blue.svg'
+import balloonIconStarGreen from '../images/balloon/aurora_balloon_star_green.svg'
+import balloonIconStarLightBlue from '../images/balloon/aurora_balloon_star_light_blue.svg'
+import balloonIconStarMagenta from '../images/balloon/aurora_balloon_star_magenta.svg'
+import balloonIconStarOrange from '../images/balloon/aurora_balloon_star_orange.svg'
+import balloonIconStarPurple from '../images/balloon/aurora_balloon_star_purple.svg'
 
-const StarBalloonIconURI = (strokeColor) => (
-  `data:image/svg+xml;utf8,<svg
-    stroke="${strokeColor}"
-    width="66.659897mm"
-    height="94.399796mm"
-    viewBox="0 0 66.659897 94.399796"
-    version="1.1"
-    id="svg1"
-    xmlSpace="preserve"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsSvg="http://www.w3.org/2000/svg">
-    <defs
-      id="defs1"/>
-    <g
-      id="layer1"
-      transform="translate(-62.477394,-63.949087)">
-      <ellipse
-        style="fill:#ffffff;fill-opacity:1;stroke:#40bfff;stroke-width:7.049;stroke-dasharray:none;stroke-opacity:1"
-        id="path1"
-        cx="95.807343"
-        cy="97.385857"
-        rx="29.805449"
-        ry="29.91227"/>
-      <rect
-        style="fill:#40bfff;fill-opacity:1;stroke:none;stroke-width:2.615;stroke-dasharray:none;stroke-opacity:1"
-        id="rect2"
-        width="13.862534"
-        height="12.187356"
-        x="88.894501"
-        y="146.16153"
-        ry="1.6599369"/>
-      <rect
-        style="fill:#40bfff;fill-opacity:1;stroke:none;stroke-width:2.05953;stroke-dasharray:none;stroke-opacity:1"
-        id="rect2-0"
-        width="15.882406"
-        height="6.5976076"
-        x="87.792946"
-        y="136.91905"
-        ry="2.3968983"/>
-      <path
-        style="fill:#40bfff;fill-opacity:1;stroke:#40bfff;stroke-width:6.55398;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-        d="m 101.1752,140.21562 18.00802,-24.12715"
-        id="path2-4"/>
-      <path
-        style="fill:#40bfff;fill-opacity:1;stroke:#40bfff;stroke-width:6.55398;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-        d="M 90.159848,140.09876 72.151829,115.97161"
-        id="path2-4-1"/>
-      <path
-        style="fill:#ffffff;fill-opacity:1;stroke:#40bfff;stroke-width:5.133;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
-        d="M 73.468687,77.391297 117.77815,117.14322"
-        id="path2"/>
-    </g>
-  </svg>`
-);
+import balloonIconVertArcsCrimson from '../images/balloon/aurora_balloon_vert_arcs_crimson.svg'
+import balloonIconVertArcsDarkBlue from '../images/balloon/aurora_balloon_vert_arcs_dark_blue.svg'
+import balloonIconVertArcsGreen from '../images/balloon/aurora_balloon_vert_arcs_green.svg'
+import balloonIconVertArcsLightBlue from '../images/balloon/aurora_balloon_vert_arcs_light_blue.svg'
+import balloonIconVertArcsMagenta from '../images/balloon/aurora_balloon_vert_arcs_magenta.svg'
+import balloonIconVertArcsOrange from '../images/balloon/aurora_balloon_vert_arcs_orange.svg'
+import balloonIconVertArcsPurple from '../images/balloon/aurora_balloon_vert_arcs_purple.svg'
 
-export {StarBalloonIconURI}
+const balloonIconList = [
+  balloonIcon2DiagCrimson,
+  balloonIcon2DiagDarkBlue,
+  balloonIcon2DiagGreen,
+  balloonIcon2DiagLightBlue,
+  balloonIcon2DiagMagenta,
+  balloonIcon2DiagOrange,
+  balloonIcon2DiagPurple,
+
+  balloonIcon3DiagCrimson,
+  balloonIcon3DiagDarkBlue,
+  balloonIcon3DiagGreen,
+  balloonIcon3DiagLightBlue,
+  balloonIcon3DiagMagenta,
+  balloonIcon3DiagOrange,
+  balloonIcon3DiagPurple,
+
+  balloonIconHorizArcsCrimson,
+  balloonIconHorizArcsDarkBlue,
+  balloonIconHorizArcsGreen,
+  balloonIconHorizArcsLightBlue,
+  balloonIconHorizArcsMagenta,
+  balloonIconHorizArcsOrange,
+  balloonIconHorizArcsPurple,
+
+  balloonIconStarCrimson,
+  balloonIconStarDarkBlue,
+  balloonIconStarGreen,
+  balloonIconStarLightBlue,
+  balloonIconStarMagenta,
+  balloonIconStarOrange,
+  balloonIconStarPurple,
+
+  balloonIconVertArcsCrimson,
+  balloonIconVertArcsDarkBlue,
+  balloonIconVertArcsGreen,
+  balloonIconVertArcsLightBlue,
+  balloonIconVertArcsMagenta,
+  balloonIconVertArcsOrange,
+  balloonIconVertArcsPurple
+]
+
+const calcGroupSelect = (uid, digits, groupSize) => (parseInt(uid.slice(-digits), 16) % groupSize);
+
+const chooseRandomIcon = (uid) => (balloonIconList[calcGroupSelect(uid, 2, balloonIconList.length)]);
+
+export {chooseRandomIcon}
