@@ -280,6 +280,7 @@ class BaseMap extends Component {
   };
 
   render() {
+    const selectedBalloonIcon = StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid));
     return (
       <GoogleMap
         defaultZoom={4}
@@ -316,7 +317,7 @@ class BaseMap extends Component {
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
             icon={{
-              url: StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid)).default,
+              url: selectedBalloonIcon,
               scaledSize: {width: 34, height: 48}
             }}
             updateLastWindowClose={this.handleLastWindowClose}
