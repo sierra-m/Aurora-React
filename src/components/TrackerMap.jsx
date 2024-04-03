@@ -280,6 +280,7 @@ class BaseMap extends Component {
   };
 
   render() {
+    const balloonURI = this.props.selectedPosition && StarBalloonIconURI(chooseRandomColor(this.props.selectedPosition.uid));
     return (
       <GoogleMap
         defaultZoom={4}
@@ -315,7 +316,7 @@ class BaseMap extends Component {
           <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={StarBalloonIconURI(chooseRandomColor(this.props.selectedPosition.uid))}
+            icon={"data:image/svg+xml;utf8,<svg><rect stroke='black' fill='black' width='50' height='25'/></svg>"}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
