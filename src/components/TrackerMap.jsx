@@ -312,6 +312,7 @@ class BaseMap extends Component {
               url: chooseRandomIcon(this.props.selectedPosition.uid),
               scaledSize: {width: 34, height: 48}
             }}
+            style={chooseRandomColorFilter(this.props.selectedPosition.uid)}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
