@@ -1,10 +1,17 @@
 
-import React, {Component} from "react";
+import fs from 'fs';
 
 
-const StarBalloonIcon = (strokeColor) => (
-  <svg
-    stroke={strokeColor}
+import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
+import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
+import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
+import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
+import balloonIconStar from '../images/aurora_balloon_star.svg'
+
+
+const StarBalloonIconURI = (strokeColor) => (
+  `data:image/svg+xml;utf8,<svg
+    stroke="${strokeColor}"
     width="66.659897mm"
     height="94.399796mm"
     viewBox="0 0 66.659897 94.399796"
@@ -54,7 +61,7 @@ const StarBalloonIcon = (strokeColor) => (
         d="M 73.468687,77.391297 117.77815,117.14322"
         id="path2"/>
     </g>
-  </svg>
+  </svg>`
 );
 
-export {StarBalloonIcon}
+export {StarBalloonIconURI}

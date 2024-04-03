@@ -39,7 +39,7 @@ import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
 import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
 import balloonIconStar from '../images/aurora_balloon_star.svg'
 
-import {StarBalloonIcon} from "../util/balloonIcons";
+import {StarBalloonIconURI} from "../util/balloonIcons";
 
 
 const balloonIconSvgs = [
@@ -316,7 +316,7 @@ class BaseMap extends Component {
           <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={selectedBalloonIcon}
+            icon={StarBalloonIconURI(chooseRandomColor(this.props.selectedPosition.uid))}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
