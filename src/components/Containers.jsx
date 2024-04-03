@@ -174,7 +174,7 @@ const SelectedFlightData = ({
   )
 };
 
-const ActiveFlight = ({uid, start_date, modem, datetime, callback}) => {
+const ActiveFlight = ({uid, compressed_uid, start_date, modem, datetime, callback}) => {
   return (
     <a style={{cursor: 'pointer'}} onClick={callback}>
       <Card className="card-item quick-shadow">
@@ -182,7 +182,7 @@ const ActiveFlight = ({uid, start_date, modem, datetime, callback}) => {
           <Card.Title>Modem: {`${modem.name} (${modem.partialImei})`}</Card.Title>
           <Card.Subtitle>Org: {modem.org}</Card.Subtitle>
           <Card.Text>
-            UID: {uid}<br/>
+            UID: {compressed_uid}<br/>
             Start Date: {start_date.format('MMMM Do[,] YYYY')} UTC<br/>
             Last Updated: {datetime.format('YYYY-MM-DD HH:mm:ss')} UTC ({datetime.fromNow()})
           </Card.Text>

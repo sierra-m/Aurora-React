@@ -61,10 +61,11 @@ class LogItem {
 }
 
 export default class LogWindow extends Component {
+  // Defined outside of state as these need to update immediately
+  lastInputPins = null;
+  lastOutputPins = null;
   state = {
     items: [],
-    lastInputPins: null,
-    lastOutputPins: null,
     autoscroll: true
   };
 
@@ -77,21 +78,19 @@ export default class LogWindow extends Component {
   }
 
   print = (inputPins, outputPins, datetime) => {
-    let lastInputPins = this.state.lastInputPins;
-    let lastOutputPins = this.state.lastOutputPins;
     let newIn = null;
     let newOut = null;
     let inChanged = false;
     let outChanged = false;
     if (typeof inputPins === "number") {
       newIn = inputPins % 16;
-      inChanged = (lastInputPins !== newIn);
-      lastInputPins = newIn;
+      inChanged = (this.lastInputPins !== newIn);
+      this.lastInputPins = newIn;
     }
     if (typeof outputPins === "number") {
       newOut = outputPins % 8;
-      outChanged = (lastOutputPins !== newOut);
-      lastOutputPins = newOut;
+      outChanged = (this.lastOutputPins !== newOut);
+      this.lastOutputPins = newOut;
     }
     const logItem = new LogItem(
       datetime,
@@ -100,11 +99,13 @@ export default class LogWindow extends Component {
       newOut
     );
     this.state.items.push(logItem);
-    this.setState({items: this.state.items, lastInputPins: lastInputPins, lastOutputPins: lastOutputPins});
+    this.setState({items: this.state.items});
   };
 
   clear () {
-    this.setState({items: [], lastInputPins: null, lastOutputPins: null});
+    this.lastInputPins = null;
+    this.lastOutputPins = null;
+    this.setState({items: []});
   }
 
   componentDidMount () {

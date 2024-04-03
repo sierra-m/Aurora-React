@@ -242,7 +242,7 @@ class Tracking extends Component {
         accordionKey: 'flight-data',
         selectedModem: data.modem
       }, () => {
-        const pinStates = flight.pinStates();
+        const pinStates = this.state.currentFlight.pinStates();
         // Load pin states log
         for (const point of pinStates) {
           this.pinLogPrint(point.input, point.output, point.timestamp);
@@ -279,7 +279,7 @@ class Tracking extends Component {
           await this.state.landingPrediction.updateAltitudeProfile(updateIndicies[0], updateIndicies[updateIndicies.length - 1]);
 
           for (const point of data.result) {
-            this.pinLogPrint(point.input_pins, point.output_pins, point.datetime);
+            this.pinLogPrint(point.input_pins, point.output_pins, moment.unix(point.datetime).format('YYYY-MM-DD HH:mm:ss'));
           }
 
           let elevation = false;
@@ -332,6 +332,7 @@ class Tracking extends Component {
       console.log('Active flight(s)');
       for (let partialPoint of data.points) {
         partialPoint.datetime = moment.utc(partialPoint.datetime, 'YYYY-MM-DD[T]HH:mm:ss[Z]');
+        partialPoint.compressed_uid = compressUID(partialPoint.uid);
         partialPoint.callback = () => {
           this.fetchFlight(partialPoint.uid);
         }
@@ -556,11 +557,11 @@ class Tracking extends Component {
               <Card>
                 <Card.Header>
                   <Image src={clockIcon} className={'icon-bar ml-2'}/>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="current-flights" onClick={() => this.setAccordionTab('current-flights')}>
-                    Current Flights
+                  <Accordion.Toggle as={Button} variant="link" eventKey="active-flights" onClick={() => this.setAccordionTab('active-flights')}>
+                    Active Flights
                   </Accordion.Toggle>
                 </Card.Header>
-                <Accordion.Collapse eventKey="current-flights">
+                <Accordion.Collapse eventKey="active-flights">
                   <Card.Body style={{overflowY: 'auto', maxHeight: '20rem'}}>
                     {this.state.activeFlights.length > 0 &&
                     this.state.activeFlights.map(partialPoint => (
