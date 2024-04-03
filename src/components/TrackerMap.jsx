@@ -48,20 +48,6 @@ const balloonColors = [
   '#4B0082'
 ];
 
-const balloonColorTransforms = [
-  {filter: `invert(8%) sepia(100%) saturate(7453%) hue-rotate(248deg) brightness(93%) contrast(142%)`},
-  {filter: `invert(28%) sepia(84%) saturate(1833%) hue-rotate(263deg) brightness(83%) contrast(100%)`},
-  {filter: `invert(34%) sepia(83%) saturate(479%) hue-rotate(70deg) brightness(105%) contrast(93%)`},
-  {filter: `invert(28%) sepia(90%) saturate(7192%) hue-rotate(340deg) brightness(88%) contrast(96%);`},
-  {filter: `invert(42%) sepia(87%) saturate(2378%) hue-rotate(193deg) brightness(103%) contrast(101%)`},
-  {filter: `invert(63%) sepia(59%) saturate(1083%) hue-rotate(357deg) brightness(99%) contrast(107%)`},
-  {filter: `invert(28%) sepia(74%) saturate(3343%) hue-rotate(5deg) brightness(106%) contrast(102%)`},
-  {filter: `invert(63%) sepia(69%) saturate(523%) hue-rotate(313deg) brightness(92%) contrast(115%)`},
-  {filter: `invert(20%) sepia(98%) saturate(2439%) hue-rotate(304deg) brightness(85%) contrast(104%)`},
-  {filter: `invert(15%) sepia(53%) saturate(3657%) hue-rotate(264deg) brightness(88%) contrast(130%)`},
-]
-
-
 const format = require('string-format');
 format.extend(String.prototype, {});
 
@@ -80,29 +66,6 @@ const dispMetersFeet = (number) => (
 const calcGroupSelect = (uid, digits, groupSize) => (parseInt(uid.slice(-digits), 16) % groupSize);
 
 const chooseRandomColor = (uid) => (balloonColors[calcGroupSelect(uid, 1, balloonColors.length)]);
-
-const chooseRandomColorFilter = (uid) => (balloonColorTransforms[calcGroupSelect(uid, 1, balloonColors.length)]);
-
-class BalloonIcon extends React.Component {
-  render() {
-    const Icon = this.props.icon;
-    return (
-      <div className="BalloonIcon">
-        <Icon style={{height: 48, width: 34}}/>
-      </div>
-    )
-  }
-}
-
-// class StarBalloonIcon extends React.Component {
-//   render() {
-//     //const svg = this.props.svg;
-//     const {filter} = chooseRandomColorFilter(this.props.uid);
-//     return (
-//       <img src={balloonIconStar} alt={'star balloon icon'} style={{height: 48, width: 34, filter: filter}}/>
-//     )
-//   }
-// }
 
 class InfoMarker extends React.PureComponent {
   /*
@@ -181,22 +144,6 @@ class InfoMarker extends React.PureComponent {
   }
 }
 
-// class BalloonInfoMarker extends InfoMarker {
-//   render() {
-//     return (
-//       <OverlayView position={this.props.position} onClick={this.onMarkerClicked}>
-//         {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
-//           <p>
-//             <strong>Latitude:</strong> {this.props.position.lat}<br/>
-//             <strong>Longitude:</strong> {this.props.position.lng}<br/>
-//             <strong>Altitude:</strong> {this.props.altitude}
-//           </p>
-//         </InfoWindow>}
-//         <StarBalloonIcon uid={this.props.uid}/>
-//       </OverlayView>
-//     )
-//   }
-// }
 
 class BaseMap extends Component {
   /*
@@ -268,6 +215,17 @@ class BaseMap extends Component {
         ref={(map) => map &&
             map.panTo(this.props.defaultCenter|| {lat: 39.833333, lng: -98.583333})}
       >
+        {this.props.selectedPosition &&
+          <InfoMarker
+            position={this.props.selectedPosition.coords()}
+            altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
+            icon={{
+              url: chooseRandomIcon(this.props.selectedPosition.uid),
+              scaledSize: {width: 34, height: 48}
+            }}
+            updateLastWindowClose={this.handleLastWindowClose}
+          />
+        }
         {this.props.startPosition &&
         <InfoMarker position={this.props.startPosition} altitude={dispMetersFeet(this.props.startPosition.alt)}
                     icon={greenIcon} updateLastWindowClose={this.handleLastWindowClose}
@@ -291,17 +249,6 @@ class BaseMap extends Component {
         <InfoMarker position={this.props.endPosition} altitude={dispMetersFeet(this.props.endPosition.alt)}
                     icon={orangeIcon} updateLastWindowClose={this.handleLastWindowClose}
         />
-        }
-        {this.props.selectedPosition &&
-          <InfoMarker
-            position={this.props.selectedPosition.coords()}
-            altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={{
-              url: chooseRandomIcon(this.props.selectedPosition.uid),
-              scaledSize: {width: 34, height: 48}
-            }}
-            updateLastWindowClose={this.handleLastWindowClose}
-          />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker
