@@ -55,7 +55,6 @@ import threeBarIcon from '../images/threeBarIcon.png'
 import clockIcon from '../images/clockIcon.png'
 import chartIcon from '../images/chartIcon.png'
 
-import { encodeUID, extractDate, extractIMEI } from '../util/snowflake'
 import {Buffer} from "buffer";
 
 const logTime = () => moment().format('HH:mm:ss');
@@ -66,6 +65,24 @@ format.extend(String.prototype, {});
 const UPDATE_DELAY = 5000;
 const ACTIVE_DELAY = 30000;
 
+
+const validateUID = (uid) => {
+  return uid.match(/[0-9a-f]{8}\-[0-9a-f]{4}\-4[0-9a-f]{3}\-[89ab][0-9a-f]{3}\-[0-9a-f]{12}/i);
+}
+
+
+const standardizeUID = (uid) => {
+  let standardUid;
+  if (uid.length === 22) {
+    const asHex = Buffer.from(uid, 'base64').toString('hex');
+    standardUid = `${asHex.slice(0,8)}-${asHex.slice(8,12)}-${asHex.slice(12,16)}-${asHex.slice(16,20)}-${asHex.slice(20)}`;
+  } else {
+    standardUid = uid;
+  }
+  if (typeof standardUid === 'string' && validateUID(standardUid)) {
+    return standardUid;
+  }
+}
 
 const compressUID = (uid) => {
   let asBase64 = Buffer.from(uid.replaceAll('-', ''), 'hex').toString('base64');
@@ -416,7 +433,7 @@ class Tracking extends Component {
     const params = queryString.parse(this.props.location.search);
 
     if ('uid' in params && typeof params.uid === 'string' && params.uid.length > 0) {
-      await this.fetchFlight(params.uid);
+      await this.fetchFlight(standardizeUID(params.uid));
     }
   }
 
@@ -442,6 +459,11 @@ class Tracking extends Component {
                 activeFlights={this.state.activeFlights}
               />
             </div>
+            {this.state.currentFlight &&
+              <a href={'/tracking'}
+                 className={'text-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}>
+                ← Return to active flights
+              </a>}
           </Column>
           <Column className={'my-2'}>
             <Accordion activeKey={this.state.accordionKey}>
@@ -485,8 +507,11 @@ class Tracking extends Component {
                 </Card.Header>
                 <Accordion.Collapse eventKey="payload-details">
                   <Card.Body className={'custom-curve-window'}>
+                    <Alert className={'pt-3'} variant={'warning'}>
+                      This feature is a work-in-progress, but may be available in future updates
+                    </Alert>
                     <Form>
-                      <Form.Check label={'Landing prediction'} onClick={() =>
+                      <Form.Check disabled={true} label={'Landing prediction'} onClick={() =>
                         this.setState({useLandingPrediction: !this.state.useLandingPrediction})
                       }/>
                     </Form>
@@ -614,15 +639,6 @@ class Tracking extends Component {
             </Accordion>
           </Column>
         </Row>
-        {this.state.currentFlight &&
-          <Row>
-            <Column>
-              <a href={'/tracking'}
-                 className={'text-secondary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}>
-                ← Return to active flights
-              </a>
-            </Column>
-          </Row>}
         <Row>
           <Column lg={12} xl={12} md={12} sm={12} xs={12}>
             <Card className={'my-3'} style={{height: '36rem'}}>
@@ -665,7 +681,7 @@ class Tracking extends Component {
                       <div className={'mt-3'}> </div>
                       <Card.Text>
                         <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
-                        <Alert variant={'info'}>
+                        <Alert className={'pt-3'} variant={'info'}>
                           <em>Note:</em> Some flights may not have recorded pin states due to a storage error, this may be fixed
                           in future updates
                         </Alert>
