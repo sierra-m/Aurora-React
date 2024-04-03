@@ -316,7 +316,7 @@ class BaseMap extends Component {
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
             icon={{
-              url: StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid)),
+              url: StarBalloonIcon(chooseRandomColor(this.props.selectedPosition.uid)).default,
               scaledSize: {width: 34, height: 48}
             }}
             updateLastWindowClose={this.handleLastWindowClose}
