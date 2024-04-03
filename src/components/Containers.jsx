@@ -34,16 +34,9 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import React from 'react'
 import moment from 'moment'
 import { dispMetersFeetBr, dispMetersFeet, mpsToFps, kphToMph } from '../util/helpers'
-import { getIcon } from '../meta/schools'
-
 import '../style/containers.css'
+import Badge from "react-bootstrap/Badge";
 
-
-const getIconIMEI = (imei) => {
-  const name = getIcon(imei);
-  if (name) return require(`../images/icons/${name}`);
-  return null;
-};
 
 const SelectedFlightData = ({
     modem,
@@ -61,7 +54,8 @@ const SelectedFlightData = ({
     max_vertical,
     altitude,
     elevation,
-    downloadFlight
+    downloadFlight,
+    isActive
   }) => {
   const state = {
     locationControl: null
@@ -76,6 +70,10 @@ const SelectedFlightData = ({
 
   return (
     <div>
+      {isActive &&
+        <Badge variant={'success'}>Active FLight</Badge>}
+      {!isActive &&
+        <Badge variant={'primary'}>Past Flight</Badge>}
       <Card.Text className={'pt-1'}>
         <Table borderless>
           <tr>
