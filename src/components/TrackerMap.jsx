@@ -23,7 +23,7 @@
 */
 
 import React, {Component} from 'react'
-import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow, Polyline, Circle} from "react-google-maps"
+import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow, Polyline, Circle, OverlayView} from "react-google-maps"
 import {GOOGLE_MAPS_KEY} from '../api_keys'
 import Image from 'react-bootstrap/Image'
 
@@ -201,7 +201,7 @@ class InfoMarker extends React.PureComponent {
 class BalloonInfoMarker extends InfoMarker {
   render() {
     return (
-      <Marker position={this.props.position} onClick={this.onMarkerClicked}>
+      <OverlayView position={this.props.position} onClick={this.onMarkerClicked}>
         {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
           <p>
             <strong>Latitude:</strong> {this.props.position.lat}<br/>
@@ -210,7 +210,7 @@ class BalloonInfoMarker extends InfoMarker {
           </p>
         </InfoWindow>}
         <StarBalloonIcon uid={this.props.uid}/>
-      </Marker>
+      </OverlayView>
     )
   }
 }
