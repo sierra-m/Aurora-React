@@ -37,7 +37,7 @@ import balloonIcon2Diag from '../images/aurora_balloon_2diag.svg'
 import balloonIcon3Diag from '../images/aurora_balloon_3diag.svg'
 import balloonIconHorizArcs from '../images/aurora_balloon_horiz_arcs.svg'
 import balloonIconVertArcs from '../images/aurora_balloon_vert_arcs.svg'
-import balloonIconStart from '../images/aurora_balloon_star.svg'
+import balloonIconStar from '../images/aurora_balloon_star.svg'
 
 
 const balloonIconSvgs = [
@@ -46,7 +46,7 @@ const balloonIconSvgs = [
   balloonIcon3Diag,
   balloonIconHorizArcs,
   balloonIconVertArcs,
-  balloonIconStart
+  balloonIconStar
 ];
 
 
@@ -105,8 +105,18 @@ class BalloonIcon extends React.Component {
     const Icon = this.props.icon;
     return (
       <div className="BalloonIcon">
-        <Icon style={{height: 48}}/>
+        <Icon style={{height: 48, width: 34}}/>
       </div>
+    )
+  }
+}
+
+class StarBalloonIcon extends React.Component {
+  render() {
+    //const svg = this.props.svg;
+    const {filter} = chooseRandomColorFilter(this.props.uid);
+    return (
+      <img src={balloonIconStar} alt={'star balloon icon'} style={{height: 48, width: 34, filter: filter}}/>
     )
   }
 }
@@ -175,7 +185,7 @@ class InfoMarker extends React.PureComponent {
 
   render() {
     return (
-      <Marker position={this.props.position} onClick={this.onMarkerClicked} icon={this.props.icon}>
+      <Marker position={this.props.position} onClick={this.onMarkerClicked}>
         {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
           <p>
             <strong>Latitude:</strong> {this.props.position.lat}<br/>
@@ -183,6 +193,7 @@ class InfoMarker extends React.PureComponent {
             <strong>Altitude:</strong> {this.props.altitude}
           </p>
         </InfoWindow>}
+        <StarBalloonIcon uid={this.props.uid}/>
       </Marker>
     )
   }
@@ -283,16 +294,12 @@ class BaseMap extends Component {
         />
         }
         {this.props.selectedPosition &&
-        <InfoMarker
-          position={this.props.selectedPosition.coords()}
-          altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-          icon={{
-            url: chooseRandomSvg(this.props.selectedPosition.uid),
-            scaledSize: {width: 34, height: 48}
-          }}
-          style={chooseRandomColorFilter(this.props.selectedPosition.uid)}
-          updateLastWindowClose={this.handleLastWindowClose}
-        />
+          <InfoMarker
+            position={this.props.selectedPosition.coords()}
+            altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
+            uid={this.props.selectedPosition.uid}
+            updateLastWindowClose={this.handleLastWindowClose}
+          />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker
