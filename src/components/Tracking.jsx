@@ -631,6 +631,7 @@ class Tracking extends Component {
                       ground={this.state.selectedPosition.ground_speed}
                       elevation={this.state.groundElevation}
                       downloadFlight={this.downloadFlight}
+                      isActive={this.state.activeFlight}
                     />
                     }
                   </Card.Body>
