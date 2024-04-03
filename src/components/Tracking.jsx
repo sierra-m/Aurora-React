@@ -674,7 +674,7 @@ class Tracking extends Component {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="wind-layers">
-                      <Alert variant={'info'}>
+                      <Alert className={'pt-3'} variant={'info'}>
                         Wind layer graph: coming soon! 🕝
                       </Alert>
                     </Tab.Pane>
@@ -682,8 +682,8 @@ class Tracking extends Component {
                       <div className={'mt-3'}> </div>
                       <Card.Text>
                         <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
-                        <Alert className={'pt-3'} variant={'info'}>
-                          <em>Note:</em> Some flights may not have recorded pin states due to a storage error, this may be fixed
+                        <Alert variant={'info'}>
+                          <em>Note:</em> Flights before April 2024 do not have recorded pin states due to a storage error, this may be fixed
                           in future updates
                         </Alert>
                       </Card.Text>

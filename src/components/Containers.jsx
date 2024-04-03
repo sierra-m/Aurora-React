@@ -71,7 +71,7 @@ const SelectedFlightData = ({
   return (
     <div>
       {isActive &&
-        <Badge variant={'success'}>Active FLight</Badge>}
+        <Badge variant={'success'}>Active Flight</Badge>}
       {!isActive &&
         <Badge variant={'primary'}>Past Flight</Badge>}
       <Card.Text className={'pt-1'}>
