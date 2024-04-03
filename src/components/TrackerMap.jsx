@@ -316,10 +316,7 @@ class BaseMap extends Component {
           <InfoMarker
             position={this.props.selectedPosition.coords()}
             altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={{
-              url: selectedBalloonIcon,
-              scaledSize: {width: 34, height: 48}
-            }}
+            icon={selectedBalloonIcon}
             updateLastWindowClose={this.handleLastWindowClose}
           />
         }
