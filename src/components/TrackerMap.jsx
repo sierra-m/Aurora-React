@@ -131,7 +131,7 @@ class InfoMarker extends React.PureComponent {
 
   render() {
     return (
-      <Marker position={this.props.position} onClick={this.onMarkerClicked} icon={this.props.icon}>
+      <Marker position={this.props.position} onClick={this.onMarkerClicked} icon={this.props.icon} zIndex={this.props.zIndex}>
         {this.state.isInfoShown && <InfoWindow onCloseClick={this.handleWindowClose}>
           <p>
             <strong>Latitude:</strong> {this.props.position.lat}<br/>
@@ -215,20 +215,9 @@ class BaseMap extends Component {
         ref={(map) => map &&
             map.panTo(this.props.defaultCenter|| {lat: 39.833333, lng: -98.583333})}
       >
-        {this.props.selectedPosition &&
-          <InfoMarker
-            position={this.props.selectedPosition.coords()}
-            altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
-            icon={{
-              url: chooseRandomIcon(this.props.selectedPosition.uid),
-              scaledSize: {width: 34, height: 48}
-            }}
-            updateLastWindowClose={this.handleLastWindowClose}
-          />
-        }
         {this.props.startPosition &&
         <InfoMarker position={this.props.startPosition} altitude={dispMetersFeet(this.props.startPosition.alt)}
-                    icon={greenIcon} updateLastWindowClose={this.handleLastWindowClose}
+                    icon={greenIcon} updateLastWindowClose={this.handleLastWindowClose} zIndex={2}
         />
         }
 
@@ -247,8 +236,20 @@ class BaseMap extends Component {
 
         {this.props.endPosition &&
         <InfoMarker position={this.props.endPosition} altitude={dispMetersFeet(this.props.endPosition.alt)}
-                    icon={orangeIcon} updateLastWindowClose={this.handleLastWindowClose}
+                    icon={orangeIcon} updateLastWindowClose={this.handleLastWindowClose}  zIndex={1}
         />
+        }
+        {this.props.selectedPosition &&
+          <InfoMarker
+            position={this.props.selectedPosition.coords()}
+            altitude={dispMetersFeet(this.props.selectedPosition.altitude)}
+            icon={{
+              url: chooseRandomIcon(this.props.selectedPosition.uid),
+              scaledSize: {width: 34, height: 48}
+            }}
+            updateLastWindowClose={this.handleLastWindowClose}
+            zIndex={3}
+          />
         }
         {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
           <Marker
@@ -271,7 +272,7 @@ class BaseMap extends Component {
         }
         {this.props.landingZone &&
         <InfoMarker position={this.props.landingZone} altitude={dispMetersFeet(this.props.landingZone.alt)}
-                    icon={parachuteIcon} updateLastWindowClose={this.handleLastWindowClose}
+                    icon={parachuteIcon} updateLastWindowClose={this.handleLastWindowClose} zIndex={1}
         />
         }
       </GoogleMap>
