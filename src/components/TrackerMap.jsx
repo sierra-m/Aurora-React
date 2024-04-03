@@ -83,8 +83,6 @@ const chooseRandomColor = (uid) => (balloonColors[calcGroupSelect(uid, 1, balloo
 
 const chooseRandomColorFilter = (uid) => (balloonColorTransforms[calcGroupSelect(uid, 1, balloonColors.length)]);
 
-const chooseRandomIcon = (uid) => (balloonIconList[calcGroupSelect(uid, 2, balloonIconList.length)]);
-
 class BalloonIcon extends React.Component {
   render() {
     const Icon = this.props.icon;
