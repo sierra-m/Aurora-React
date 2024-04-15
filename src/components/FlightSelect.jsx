@@ -76,10 +76,12 @@ export default class FlightSelect extends Component {
         <Tab.Content>
           <Tab.Pane eventKey="by-modem">
             <Row>
-              <h6>Select Modem</h6>
+              <Column>
+                <h6>Select Modem</h6>
+              </Column>
             </Row>
             <Row>
-              <Column lg={10}>
+              <Column xs={9}>
                 <Select
                   value={this.state.selectedModemOption}
                   onChange={this.imeiSelectChange}
@@ -107,37 +109,39 @@ export default class FlightSelect extends Component {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#">
-                      <Select
-                        value={this.state.selectedOrgOption}
-                        onChange={this.orgSelectChange}
-                        options={this.props.modemList.map((modem) => ({
-                          value: modem.org,
-                          label: modem.org
-                        }))}
-                        menuPortalTarget={document.querySelector('body')}
-                        isSearchable={true}
-                      />
-                    </Dropdown.Item>
+                    <Select
+                      value={this.state.selectedOrgOption}
+                      onChange={this.orgSelectChange}
+                      options={this.props.modemList.map((modem) => ({
+                        value: modem.org,
+                        label: modem.org
+                      }))}
+                      menuPortalTarget={document.querySelector('body')}
+                      isSearchable={true}
+                    />
                   </Dropdown.Menu>
                 </Dropdown>
               </Column>
             </Row>
             <Row>
-              <h6 className={'mt-2'}>Select Flight Date</h6>
+              <Column>
+                <h6 className={'mt-2'}>Select Flight Date</h6>
+              </Column>
             </Row>
             <Row>
-              <Select
-                value={this.state.selectedFlightDateOption}
-                onChange={this.flightDateSelectChange}
-                options={this.props.flightDateList.map((x, index) => ({
-                  value: x.uid,
-                  label: `${index + 1}: ${x.date}`
-                })).reverse()}
-                menuPortalTarget={document.querySelector('body')}
-                isSearchable={true}
-                isDisabled={this.props.flightDateList.length < 1}
-              />
+              <Column>
+                <Select
+                  value={this.state.selectedFlightDateOption}
+                  onChange={this.flightDateSelectChange}
+                  options={this.props.flightDateList.map((x, index) => ({
+                    value: x.uid,
+                    label: `${index + 1}: ${x.date}`
+                  })).reverse()}
+                  menuPortalTarget={document.querySelector('body')}
+                  isSearchable={true}
+                  isDisabled={this.props.flightDateList.length < 1}
+                />
+              </Column>
             </Row>
           </Tab.Pane>
           <Tab.Pane eventKey="by-date">
