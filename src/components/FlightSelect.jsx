@@ -38,13 +38,18 @@ export default class FlightSelect extends Component {
    * Change handler for IMEIs dropdown
    * @param {Object} change The new change
    */
-  imeiSelectChange = async (change) => {
-    const modem = this.props.modemList.find((m) => (m.name === change.value));
-    this.setState({selectedModem: modem, selectedModemOption: change, selectedFlightDateOption: null});
-    if (modem !== undefined) {
-      console.log('Selection chosen:');
-      console.log(`(${modem.partialImei}) ${modem.name}`);
-      await this.props.fetchFlightsFrom(modem.name);
+  modemSelectChange = async (change) => {
+    if (change) {
+      const modem = this.props.modemList.find((m) => (m.name === change.value));
+      this.setState({selectedModem: modem, selectedModemOption: change, selectedFlightDateOption: null});
+      if (modem !== undefined) {
+        console.log('Selection chosen:');
+        console.log(`(${modem.partialImei}) ${modem.name}`);
+        await this.props.fetchFlightsFrom(modem.name);
+      }
+    } else {
+      this.setState({selectedModem: null, selectedModemOption: null, selectedFlightDateOption: null})
+      this.props.clearFlightDateList();
     }
   };
 
@@ -85,7 +90,7 @@ export default class FlightSelect extends Component {
               <Column xs={9} className={'pr-0'}>
                 <Select
                   value={this.state.selectedModemOption}
-                  onChange={this.imeiSelectChange}
+                  onChange={this.modemSelectChange}
                   options={this.props.modemList.filter((modem) => {
                     if (this.state.selectedOrgFilter !== null) {
                       return modem.org === this.state.selectedOrgFilter;
@@ -107,7 +112,7 @@ export default class FlightSelect extends Component {
                       <small><em>Filtered by: </em></small>
                     </p>
                     <p>
-                      <a
+                      <small><a
                         className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
                         href={"#"}
                         onClick={() => {
@@ -120,13 +125,13 @@ export default class FlightSelect extends Component {
                           <path
                             d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                         </svg>
-                      </a>
+                      </a></small>
                     </p>
                   </div>
                 }
               </Column>
               {/* Button for filter by organization */}
-              <Column xs={3} className={'pl-0'}>
+              <Column xs={3} className={'px-0'}>
                 <Dropdown alignRight={true}>
                   <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

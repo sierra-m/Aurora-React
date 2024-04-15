@@ -482,6 +482,7 @@ class Tracking extends Component {
                       flightDateList={this.state.flightList}
                       fetchFlightsFrom={this.fetchFlightsFrom}
                       fetchFlight={this.fetchFlight}
+                      clearFlightDateList={() => {this.setState({flightList: []})}}
                     />
                   </Card.Body>
                 </Accordion.Collapse>
