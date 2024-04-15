@@ -46,6 +46,7 @@ import AltitudeChart from './AltitudeChart'
 import LandingPrediction from '../util/landing'
 import LogWindow, {LogItem} from './LogWindow'
 import { SelectedFlightData, ActiveFlight } from "./Containers";
+import FlightSelect from "./FlightSelect";
 
 import { Flight } from '../util/flight'
 import { getVelocity } from "../util/velocity";
@@ -476,24 +477,11 @@ class Tracking extends Component {
                 </Card.Header>
                 <Accordion.Collapse eventKey="flight-select">
                   <Card.Body>
-                    <h6>Select Modem</h6>
-                    <Select
-                      value={this.state.selectedModemOption}
-                      onChange={this.imeiSelectChange}
-                      options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
-                      menuPortalTarget={document.querySelector('body')}
-                      isSearchable={true}
-                      isClearable={true}
-                      autoFocus={true}
-                    />
-                    <h6 className={'mt-2'}>Select Flight</h6>
-                    <Select
-                      value={this.state.selectedFlightOption}
-                      onChange={this.flightSelectChange}
-                      options={this.state.flightList.map((x, index) => ({value: x.uid, label: `${index+1}: ${x.date}`})).reverse()}
-                      menuPortalTarget={document.querySelector('body')}
-                      isSearchable={true}
-                      isDisabled={this.state.flightList.length < 1}
+                    <FlightSelect
+                      modemList={this.state.modemList}
+                      flightDateList={this.state.flightList}
+                      fetchFlightsFrom={this.fetchFlightsFrom}
+                      fetchFlight={this.fetchFlight}
                     />
                   </Card.Body>
                 </Accordion.Collapse>
