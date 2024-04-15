@@ -112,7 +112,7 @@ export default class FlightSelect extends Component {
                         this.setState({selectedOrgFilter: null})
                       }}
                     >
-                      {this.state.selectedOrgFilter} 
+                      {this.state.selectedOrgFilter}
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                            className="bi bi-x-square" viewBox="0 0 16 16">
                         <path
@@ -126,7 +126,7 @@ export default class FlightSelect extends Component {
               </Column>
               {/* Button for filter by organization */}
               <Column className={'pl-0'}>
-                <Dropdown menuAlign="right">
+                <Dropdown alignRight={true}>
                   <Dropdown.Toggle variant="light" id="dropdown-basic">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          className="bi bi-funnel" viewBox="0 0 16 16">
