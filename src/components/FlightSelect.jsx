@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
 import Dropdown from 'react-bootstrap/Dropdown';
+import Badge from "react-bootstrap/Badge";
 
 
 export default class FlightSelect extends Component {
@@ -81,7 +82,7 @@ export default class FlightSelect extends Component {
               </Column>
             </Row>
             <Row>
-              <Column xs={9}>
+              <Column xs={9} className={'pr-0'}>
                 <Select
                   value={this.state.selectedModemOption}
                   onChange={this.imeiSelectChange}
@@ -100,10 +101,18 @@ export default class FlightSelect extends Component {
                   isClearable={true}
                   autoFocus={true}
                 />
+                {this.state.selectedOrgFilter &&
+                  <p>
+                    Filtered by
+                    <Badge variant={"primary"} onClick={() => {this.setState({selectedOrgFilter: null})}}>
+                      {this.state.selectedOrgFilter} ✖
+                    </Badge>
+                  </p>
+                }
               </Column>
               {/* Button for filter by organization */}
-              <Column>
-                <Dropdown>
+              <Column className={'pl-0'}>
+                <Dropdown drop={'left'} variant={'light'}>
                   <Dropdown.Toggle variant="primary" id="dropdown-basic">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          className="bi bi-funnel" viewBox="0 0 16 16">
