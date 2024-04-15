@@ -112,9 +112,9 @@ export default class FlightSelect extends Component {
                     <Select
                       value={this.state.selectedOrgOption}
                       onChange={this.orgSelectChange}
-                      options={this.props.modemList.map((modem) => ({
-                        value: modem.org,
-                        label: modem.org
+                      options={[...new Set(this.props.modemList.map((modem) => (modem.org)))].map((org) => ({
+                        value: org,
+                        label: org
                       }))}
                       menuPortalTarget={document.querySelector('body')}
                       isSearchable={true}
