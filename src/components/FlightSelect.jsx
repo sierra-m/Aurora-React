@@ -10,7 +10,7 @@ import Nav from 'react-bootstrap/Nav'
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from "react-bootstrap/Button";
 import moment from 'moment'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 export default class FlightSelect extends Component {
