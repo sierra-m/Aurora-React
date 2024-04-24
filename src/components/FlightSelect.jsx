@@ -9,6 +9,8 @@ import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from "react-bootstrap/Button";
+import moment from 'moment'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default class FlightSelect extends Component {
@@ -20,8 +22,6 @@ export default class FlightSelect extends Component {
    */
 
   state = {
-    filteredModemList: [],
-
     // Select variables (option objects for select components)
     selectedModemOption: null,
     selectedFlightDateOption: null,
@@ -107,38 +107,34 @@ export default class FlightSelect extends Component {
                   autoFocus={true}
                 />
                 {this.state.selectedOrgFilter &&
-                  <div className={'pt-1'}>
-                    <p>
-                      <small><em>Filtered by: </em></small>
-                    </p>
-                    <p>
-                      <small><a
-                        className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
-                        href={"#"}
-                        onClick={() => {
-                          this.setState({selectedOrgFilter: null})
-                        }}
-                      >
-                        {this.state.selectedOrgFilter}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             className="bi bi-x-lg pl-1 mb-1" viewBox="0 0 16 16">
-                          <path
-                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                        </svg>
-                      </a></small>
-                    </p>
-                  </div>
+                  <Row className={'pt-1'}>
+                    <Column className={'pr-0 mr-0'}>
+                      <p>
+                        <small><em>Filtered by: </em></small>
+                      </p>
+                    </Column>
+                    <Column className={'pl-0 ml-0'}>
+                      <p>
+                        <small><a
+                          className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
+                          href={"#"}
+                          onClick={() => {
+                            this.setState({selectedOrgFilter: null})
+                          }}
+                        >
+                          {this.state.selectedOrgFilter}
+                          <i className="bi bi-x-lg pl-1 mb-1"></i>
+                        </a></small>
+                      </p>
+                    </Column>
+                  </Row>
                 }
               </Column>
               {/* Button for filter by organization */}
-              <Column xs={3} className={'px-0'}>
+              <Column xs={3} className={'px-0 mx-0'}>
                 <Dropdown alignRight={true}>
                   <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         className="bi bi-funnel" viewBox="0 0 16 16">
-                      <path
-                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
-                    </svg>
+                    <i className="bi bi-funnel"></i>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu style={{width: '15rem'}}>
@@ -180,7 +176,15 @@ export default class FlightSelect extends Component {
             </Row>
           </Tab.Pane>
           <Tab.Pane eventKey="by-date">
-
+            <Form>
+              <Form.Group className="mb-3" controlId="by-date-form.date-select">
+                <Form.Label>Select Start Date</Form.Label>
+                <Form.Control type={'date'} placeholder={moment().format('YYYY-MM-DD')}/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Select Modem</Form.Label>
+              </Form.Group>
+            </Form>
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
