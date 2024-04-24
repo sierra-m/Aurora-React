@@ -132,29 +132,31 @@ export default class FlightSelect extends Component {
               </Column>
             </Row>
             <Row>
-              {this.state.selectedOrgFilter &&
-                <Row className={'pt-1'}>
-                  <Column className={'pr-0 mr-0'} xs={4}>
-                    <p>
-                      <small><em>Filtered by: </em></small>
-                    </p>
-                  </Column>
-                  <Column className={'pl-0 ml-0'}>
-                    <p>
-                      <small><a
-                        className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
-                        href={"#"}
-                        onClick={() => {
-                          this.setState({selectedOrgFilter: null, selectedOrgOption: null})
-                        }}
-                      >
-                        {this.state.selectedOrgFilter}
-                        <i className="bi bi-x-lg pl-1 mb-1"></i>
-                      </a></small>
-                    </p>
-                  </Column>
-                </Row>
-              }
+              <Column>
+                {this.state.selectedOrgFilter &&
+                  <Row className={'pt-1'}>
+                    <Column className={'pr-0 mr-0'} xs={4}>
+                      <p>
+                        <small><em>Filtered by: </em></small>
+                      </p>
+                    </Column>
+                    <Column className={'pl-0 ml-0'}>
+                      <p>
+                        <small><a
+                          className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
+                          href={"#"}
+                          onClick={() => {
+                            this.setState({selectedOrgFilter: null, selectedOrgOption: null})
+                          }}
+                        >
+                          {this.state.selectedOrgFilter}
+                          <i className="bi bi-x-lg pl-1 mb-1"></i>
+                        </a></small>
+                      </p>
+                    </Column>
+                  </Row>
+                }
+              </Column>
             </Row>
             <Row>
               <Column>
