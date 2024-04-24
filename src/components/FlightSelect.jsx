@@ -108,7 +108,7 @@ export default class FlightSelect extends Component {
                 />
                 {this.state.selectedOrgFilter &&
                   <Row className={'pt-1'}>
-                    <Column className={'pr-0 mr-0'}>
+                    <Column className={'pr-0 mr-0'} xs={4}>
                       <p>
                         <small><em>Filtered by: </em></small>
                       </p>
@@ -119,7 +119,7 @@ export default class FlightSelect extends Component {
                           className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
                           href={"#"}
                           onClick={() => {
-                            this.setState({selectedOrgFilter: null})
+                            this.setState({selectedOrgFilter: null, selectedOrgOption: null})
                           }}
                         >
                           {this.state.selectedOrgFilter}
