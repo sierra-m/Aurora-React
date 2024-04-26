@@ -511,7 +511,7 @@ class Tracking extends Component {
                       fetchFlight={this.fetchFlight}
                       clearFlightDateList={() => {this.setState({flightList: []})}}
                       clearModemsByDateList={() => {this.setState({modemsByDateList: []})}}
-                      clearSelectedFlight={() => {this.setState({currentFlight: null})}}
+                      clearSelectedFlight={() => {this.setState({currentFlight: null, selectedPosition: null})}}
                     />
                   </Card.Body>
                 </Accordion.Collapse>
