@@ -13,21 +13,142 @@ import moment from 'moment'
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 
+class ModemSelect extends Component {
+  /** Props:
+   *  - modemList: list of modems
+   *  - handleModemSelected: function to call when modem is selected
+   *  - handleModemCleared: function to call when modem is cleared
+   */
+
+  state = {
+    selectedModemOption: null,
+    selectedOrgOption: null,
+    selectedOrgFilter: null
+  }
+
+  orgSelectChange = async (change) => {
+    this.setState({selectedOrgOption: change, selectedOrgFilter: change.value});
+  }
+
+  /**
+   * Change handler for IMEIs dropdown
+   * @param {Object} change The new change
+   */
+  modemSelectChange = async (change) => {
+    if (change) {
+      const modem = this.props.modemList.find((m) => (m.name === change.value));
+      this.setState({selectedModemOption: change});
+      this.props.handleModemSelected(modem);
+    } else {
+      this.setState({selectedModemOption: null})
+      this.props.handleModemCleared();
+    }
+  };
+
+  render() {
+    return (
+      <div>
+        <Row className={'mt-3'}>
+          <Column>
+            <h6>Select Modem</h6>
+          </Column>
+        </Row>
+        <Row>
+          <Column xs={9} className={'pr-0'}>
+            <Select
+              value={this.state.selectedModemOption}
+              onChange={this.modemSelectChange}
+              options={this.props.modemList.filter((modem) => {
+                if (this.state.selectedOrgFilter !== null) {
+                  return modem.org === this.state.selectedOrgFilter;
+                } else {
+                  return true;
+                }
+              }).map((modem) => ({
+                value: modem.name,
+                label: `(${modem.partialImei}) ${modem.name}`
+              }))}
+              menuPortalTarget={document.querySelector('body')}
+              isSearchable={true}
+              isClearable={true}
+              autoFocus={true}
+            />
+          </Column>
+          {/* Button for filter by organization */}
+          <Column xs={3} className={'px-0 mx-0'}>
+            <Dropdown alignRight={true}>
+              <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                <i className="bi bi-funnel"></i>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu style={{width: '15rem'}}>
+                <h6 className={'mx-1'}>Filter by organization</h6>
+                <Select
+                  className={'mx-1'}
+                  value={this.state.selectedOrgOption}
+                  onChange={this.orgSelectChange}
+                  options={[...new Set(this.props.modemList.map((modem) => (modem.org)))].map((org) => ({
+                    value: org,
+                    label: org
+                  }))}
+                  menuPortalTarget={document.querySelector('body')}
+                  isSearchable={true}
+                />
+              </Dropdown.Menu>
+            </Dropdown>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {this.state.selectedOrgFilter &&
+              <Row className={'pt-1'}>
+                <Column className={'pr-0 mr-0'} xs={4}>
+                  <p>
+                    <small><em>Filtered by: </em></small>
+                  </p>
+                </Column>
+                <Column className={'pl-0 ml-0'}>
+                  <p>
+                    <small><a
+                      className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
+                      href={"#"}
+                      onClick={() => {
+                        this.setState({selectedOrgFilter: null, selectedOrgOption: null})
+                      }}
+                    >
+                      {this.state.selectedOrgFilter}
+                      <i className="bi bi-x-lg pl-1 mb-1"></i>
+                    </a></small>
+                  </p>
+                </Column>
+              </Row>
+            }
+          </Column>
+        </Row>
+      </div>
+    )
+  }
+}
+
 export default class FlightSelect extends Component {
   /** Props:
    *  - modemList: list of modems
    *  - flightDateList: list of flight dates
+   *  - modemsByDateList: list of modems by a specific date
    *  - fetchFlightsFrom: function to pull dates for a modem name
    *  - fetchFlight: function to pull a flight based on modem name and date
+   *  - fetchModemsByDate: function to pull list of modems from a particular date
    */
 
   state = {
     // Select variables (option objects for select components)
+    selectedModem: null,
     selectedModemOption: null,
     selectedFlightDateOption: null,
     selectedOrgOption: null,
-
-    selectedOrgFilter: null
+    selectedOrgFilter: null,
+    selectedDate: null,
+    selectedDateInvalid: false
   };
 
   orgSelectChange = async (change) => {
@@ -41,7 +162,7 @@ export default class FlightSelect extends Component {
   modemSelectChange = async (change) => {
     if (change) {
       const modem = this.props.modemList.find((m) => (m.name === change.value));
-      this.setState({selectedModem: modem, selectedModemOption: change, selectedFlightDateOption: null});
+      this.setState({selectedModemOption: change, selectedFlightDateOption: null});
       if (modem !== undefined) {
         console.log('Selection chosen:');
         console.log(`(${modem.partialImei}) ${modem.name}`);
@@ -51,6 +172,44 @@ export default class FlightSelect extends Component {
       this.setState({selectedModem: null, selectedModemOption: null, selectedFlightDateOption: null})
       this.props.clearFlightDateList();
     }
+  };
+
+  handleModemSelected = async (modem, narrowByModem) => {
+    if (modem !== undefined) {
+      console.log('Selection chosen:');
+      console.log(`(${modem.partialImei}) ${modem.name}`);
+      if (narrowByModem) {
+        // Handle "choose by modem" case
+        await this.props.fetchFlightsFrom(modem.name);
+        this.setState({selectedModem: modem});
+      } else {
+        // Handle "choose by date" case
+        for (const flight of this.props.modemsByDateList) {
+          if (flight.modem.name === modem.name) {
+            await this.props.fetchFlight(flight.uid);
+            return;
+          }
+        }
+      }
+    }
+  };
+
+  handleModemCleared = async (narrowByModem) => {
+    if (narrowByModem) {
+      // Handle "choose by modem" case
+      this.setState({selectedFlightDateOption: null})
+      this.props.clearFlightDateList();
+    } else {
+      // Handle "choose by date" case
+      // do nothing currently
+    }
+  };
+
+  handleDateFormChange = async (event) => {
+    const selectedDate = event.target.value;
+    this.setState({selectedDate: selectedDate});
+    const success = await this.props.fetchModemsByDate(selectedDate);
+    this.setState({selectedDateInvalid: !success});
   };
 
   /**
@@ -81,83 +240,11 @@ export default class FlightSelect extends Component {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="by-modem">
-            <Row className={'mt-3'}>
-              <Column>
-                <h6>Select Modem</h6>
-              </Column>
-            </Row>
-            <Row>
-              <Column xs={9} className={'pr-0'}>
-                <Select
-                  value={this.state.selectedModemOption}
-                  onChange={this.modemSelectChange}
-                  options={this.props.modemList.filter((modem) => {
-                    if (this.state.selectedOrgFilter !== null) {
-                      return modem.org === this.state.selectedOrgFilter;
-                    } else {
-                      return true;
-                    }
-                  }).map((modem) => ({
-                    value: modem.name,
-                    label: `(${modem.partialImei}) ${modem.name}`
-                  }))}
-                  menuPortalTarget={document.querySelector('body')}
-                  isSearchable={true}
-                  isClearable={true}
-                  autoFocus={true}
-                />
-              </Column>
-              {/* Button for filter by organization */}
-              <Column xs={3} className={'px-0 mx-0'}>
-                <Dropdown alignRight={true}>
-                  <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                    <i className="bi bi-funnel"></i>
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu style={{width: '15rem'}}>
-                    <h6 className={'mx-1'}>Filter by organization</h6>
-                    <Select
-                      className={'mx-1'}
-                      value={this.state.selectedOrgOption}
-                      onChange={this.orgSelectChange}
-                      options={[...new Set(this.props.modemList.map((modem) => (modem.org)))].map((org) => ({
-                        value: org,
-                        label: org
-                      }))}
-                      menuPortalTarget={document.querySelector('body')}
-                      isSearchable={true}
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Column>
-            </Row>
-            <Row>
-              <Column>
-                {this.state.selectedOrgFilter &&
-                  <Row className={'pt-1'}>
-                    <Column className={'pr-0 mr-0'} xs={4}>
-                      <p>
-                        <small><em>Filtered by: </em></small>
-                      </p>
-                    </Column>
-                    <Column className={'pl-0 ml-0'}>
-                      <p>
-                        <small><a
-                          className={'text-primary link-offset-2 link-underline-opacity-50 link-underline-opacity-100-hover'}
-                          href={"#"}
-                          onClick={() => {
-                            this.setState({selectedOrgFilter: null, selectedOrgOption: null})
-                          }}
-                        >
-                          {this.state.selectedOrgFilter}
-                          <i className="bi bi-x-lg pl-1 mb-1"></i>
-                        </a></small>
-                      </p>
-                    </Column>
-                  </Row>
-                }
-              </Column>
-            </Row>
+            <ModemSelect
+              modemList={this.props.modemList}
+              handleModemSelected={(modem) => this.handleModemSelected(modem, true)}
+              handleModemCleared={() => this.handleModemCleared(true)}
+            />
             <Row>
               <Column>
                 <h6 className={'mt-2'}>Select Flight Date</h6>
@@ -175,20 +262,43 @@ export default class FlightSelect extends Component {
                   menuPortalTarget={document.querySelector('body')}
                   isSearchable={true}
                   isDisabled={this.props.flightDateList.length < 1}
+                  isLoading={this.state.selectedModem !== null && this.props.flightDateList.length === 0}
                 />
               </Column>
             </Row>
           </Tab.Pane>
           <Tab.Pane eventKey="by-date">
-            <Form>
-              <Form.Group className="mb-3" controlId="by-date-form.date-select">
-                <Form.Label>Select Start Date</Form.Label>
-                <Form.Control type={'date'} placeholder={moment().format('YYYY-MM-DD')}/>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Select Modem</Form.Label>
-              </Form.Group>
-            </Form>
+            <Row className={'mt-3'}>
+              <Column>
+                <Form>
+                  <Form.Group className="mb-3" controlId="by-date-form.date-select">
+                    <Form.Label>Select Start Date</Form.Label>
+                    <Form.Control
+                      type={'date'}
+                      name={'from-date'}
+                      placeholder={moment().format('YYYY-MM-DD')}
+                      value={this.state.selectedDate}
+                      onChange={this.handleDateFormChange}
+                    />
+                    {
+                      this.state.selectedDateInvalid &&
+                      <Form.Text className="text-danger">
+                        No flights found for this date.
+                      </Form.Text>
+                    }
+                  </Form.Group>
+                </Form>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                <ModemSelect
+                  modemList={this.props.modemsByDateList.map((flight) => (flight.modem))}
+                  handleModemSelected={(modem) => this.handleModemSelected(modem, false)}
+                  handleModemCleared={() => this.handleModemCleared(false)}
+                />
+              </Column>
+            </Row>
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
