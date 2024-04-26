@@ -207,9 +207,9 @@ export default class FlightSelect extends Component {
 
   handleDateFormChange = async (event) => {
     const selectedDate = event.target.value;
-    this.setState({selectedDate: selectedDate});
     const success = await this.props.fetchModemsByDate(selectedDate);
-    this.setState({selectedDateInvalid: !success});
+    this.setState({selectedDate: selectedDate, selectedDateInvalid: !success});
+    this.props.clearSelectedFlight();
   };
 
   /**
