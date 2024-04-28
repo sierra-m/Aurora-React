@@ -44,7 +44,7 @@ class LogItem {
 
   // For searching/comparing
   toString () {
-    return `[${this.time}] ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
+    return `[${this.time}] ${this.status} ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
   }
 
   toComponent () {
@@ -160,7 +160,7 @@ export default class LogWindow extends Component {
                 <Container className={'log-container'}>
                   {this.state.items.filter((item) => {
                     if (this.state.filterText) {
-                      return item.toString().includes(this.state.filterText);
+                      return item.toString().includes(this.state.filterText.toLowerCase());
                     }
                     return true;
                   }).map(item => {
