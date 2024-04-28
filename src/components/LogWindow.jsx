@@ -131,7 +131,7 @@ export default class LogWindow extends Component {
   }
 
   handleStatusFilterChange (change) {
-
+    this.setState({filterStatusOption: change});
   }
 
   componentDidMount () {
@@ -172,8 +172,8 @@ export default class LogWindow extends Component {
               <Card.Text>
                 <Container className={'log-container'}>
                   {this.state.items.filter((item) => {
-                    if (this.state.filterText) {
-                      return item.toString().includes(this.state.filterText.toLowerCase());
+                    if (this.state.filterStatusOption) {
+                      return item.status === this.state.filterStatusOption.value;
                     }
                     return true;
                   }).map(item => {
