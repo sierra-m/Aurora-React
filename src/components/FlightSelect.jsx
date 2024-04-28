@@ -242,12 +242,15 @@ export default class FlightSelect extends Component {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="by-modem">
-            <ModemSelect
-              modemList={this.props.modemList}
-              handleModemSelected={(modem) => this.handleModemSelected(modem, true)}
-              handleModemCleared={() => this.handleModemCleared(true)}
-              className={'mt-3'}
-            />
+            <Row className={'mt-3'}>
+              <Column>
+                <ModemSelect
+                  modemList={this.props.modemList}
+                  handleModemSelected={(modem) => this.handleModemSelected(modem, true)}
+                  handleModemCleared={() => this.handleModemCleared(true)}
+                />
+              </Column>
+            </Row>
             <Row>
               <Column>
                 <h6 className={'mt-2'}>Select Flight Date</h6>
