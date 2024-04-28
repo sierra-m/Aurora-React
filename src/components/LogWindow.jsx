@@ -30,6 +30,7 @@ import Badge from 'react-bootstrap/Badge'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import moment from 'moment'
+import Select from 'react-select'
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 
@@ -77,8 +78,14 @@ export default class LogWindow extends Component {
   state = {
     items: [],
     autoscroll: true,
-    filterText: ''
+    filterText: '',
+    filterStatusOption: null
   };
+
+  statusOptions = ['Any', 'Changed', 'Unchanged'].map((item) => ({
+    label: item,
+    value: item.toLowerCase()
+  }));
 
   defaultProps = {
     autoscroll: true
@@ -123,6 +130,10 @@ export default class LogWindow extends Component {
     this.setState({filterText: event.target.value});
   }
 
+  handleStatusFilterChange (change) {
+
+  }
+
   componentDidMount () {
     if (this.props.registerControls !== null) {
       this.props.registerControls(this.print, this.clear);
@@ -141,22 +152,24 @@ export default class LogWindow extends Component {
         <Card.Header>{this.props.title}</Card.Header>
         <Card.Text>
           <Container className={'log-container'}>
+            <Form>
+              <InputGroup size={'sm'}>
+                <InputGroup.Text>
+                  <i className="bi bi-filter"></i>
+                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Status:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Select
+                  value={this.state.filterStatusOption}
+                  onChange={this.handleStatusFilterChange}
+                  options={this.statusOptions}
+                  defaultValue={this.statusOptions[0]}
+                />
+              </InputGroup>
+            </Form>
             <Card className={'log-card'}>
               <Card.Text>
-                <Form>
-                  <InputGroup size={'sm'}>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>
-                        <i className="bi bi-filter ml-1"></i>
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      id={'log-filter-control'}
-                      placeholder={'Filter'}
-                      onChange={this.handleFilterChange.bind(this)}
-                    />
-                  </InputGroup>
-                </Form>
                 <Container className={'log-container'}>
                   {this.state.items.filter((item) => {
                     if (this.state.filterText) {
