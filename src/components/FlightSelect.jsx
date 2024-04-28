@@ -48,7 +48,7 @@ class ModemSelect extends Component {
   render() {
     return (
       <div>
-        <Row className={'mt-3'}>
+        <Row>
           <Column>
             <h6>Select Modem</h6>
           </Column>
@@ -81,7 +81,7 @@ class ModemSelect extends Component {
                 <i className="bi bi-funnel"></i>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{width: '15rem', zIndex: 100}}>
+              <Dropdown.Menu style={{width: '15rem'}}>
                 <h6 className={'mx-1'}>Filter by organization</h6>
                 <Select
                   className={'mx-1'}
@@ -93,6 +93,7 @@ class ModemSelect extends Component {
                   }))}
                   menuPortalTarget={document.querySelector('body')}
                   isSearchable={true}
+                  style={{zIndex: 500}}
                 />
               </Dropdown.Menu>
             </Dropdown>
@@ -201,7 +202,8 @@ export default class FlightSelect extends Component {
       this.props.clearFlightDateList();
     } else {
       // Handle "choose by date" case
-      // do nothing currently
+      // Clearing selected flight causes map to refocus on search results
+      this.props.clearSelectedFlight();
     }
   };
 
@@ -244,6 +246,7 @@ export default class FlightSelect extends Component {
               modemList={this.props.modemList}
               handleModemSelected={(modem) => this.handleModemSelected(modem, true)}
               handleModemCleared={() => this.handleModemCleared(true)}
+              className={'mt-3'}
             />
             <Row>
               <Column>
