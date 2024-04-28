@@ -53,7 +53,7 @@ class LogItem {
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
         {/* Add spaces as padding for alignment*/}
-        {this.status === 'changed' && <samp>  </samp>}
+        {this.status === 'changed' && <samp style={{whiteSpace: 'pre'}}>  </samp>}
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
@@ -70,7 +70,8 @@ export default class LogWindow extends Component {
   lastOutputPins = null;
   state = {
     items: [],
-    autoscroll: true
+    autoscroll: true,
+    filterText: ''
   };
 
   defaultProps = {
@@ -112,6 +113,10 @@ export default class LogWindow extends Component {
     this.setState({items: []});
   }
 
+  handleFilterChange (event) {
+    this.setState({filterText: event.target.value});
+  }
+
   componentDidMount () {
     if (this.props.registerControls !== null) {
       this.props.registerControls(this.print, this.clear);
@@ -133,14 +138,17 @@ export default class LogWindow extends Component {
             <Card className={'log-card'}>
               <Card.Text>
                 <Form>
-                  <InputGroup>
+                  <InputGroup size={'sm'}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        Filter
                         <i className="bi bi-filter ml-1"></i>
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <Form.Control id={'log-filter-control'} placeholder={'Example: Changed'}/>
+                    <Form.Control
+                      id={'log-filter-control'}
+                      placeholder={'Filter'}
+                      onChange={this.handleFilterChange.bind(this)}
+                    />
                   </InputGroup>
                 </Form>
                 <Container className={'log-container'}>
