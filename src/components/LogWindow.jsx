@@ -153,7 +153,7 @@ export default class LogWindow extends Component {
         <Card.Text>
           <Container className={'log-container'}>
             <Form>
-              <InputGroup size={'sm'}>
+              <InputGroup size={'sm'} style={{width: '15rem'}}>
                 <InputGroup.Text>
                   <i className="bi bi-filter"></i>
                 </InputGroup.Text>
@@ -165,6 +165,7 @@ export default class LogWindow extends Component {
                   onChange={this.handleStatusFilterChange}
                   options={this.statusOptions}
                   defaultValue={this.statusOptions[0]}
+                  menuPortalTarget={document.querySelector('body')}
                 />
               </InputGroup>
             </Form>
