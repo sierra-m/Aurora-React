@@ -28,7 +28,9 @@ import '../style/logwindow.css'
 import Container from 'react-bootstrap/Container'
 import Badge from 'react-bootstrap/Badge'
 import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import moment from 'moment'
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 class LogItem {
@@ -41,7 +43,7 @@ class LogItem {
 
   toComponent () {
     // Determine Bootstrap Badge color from status
-    let statusVariant = 'primary';
+    let statusVariant;
     if (this.status === 'changed') statusVariant = 'success';
     else if (this.status === 'unchanged') statusVariant = 'primary';
 
@@ -50,6 +52,8 @@ class LogItem {
         <ColorSamp color={'#d300a4'}>[{this.time}] </ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
+        {/* Add spaces as padding for alignment*/}
+        {this.status === 'changed' && <samp>  </samp>}
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
@@ -128,6 +132,17 @@ export default class LogWindow extends Component {
           <Container className={'log-container'}>
             <Card className={'log-card'}>
               <Card.Text>
+                <Form>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        Filter
+                        <i className="bi bi-filter ml-1"></i>
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control id={'log-filter-control'} placeholder={'Example: Changed'}/>
+                  </InputGroup>
+                </Form>
                 <Container className={'log-container'}>
                   {this.state.items.map(item => {
                     if (typeof item === 'string') return (
