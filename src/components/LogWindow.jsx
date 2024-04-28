@@ -37,15 +37,21 @@ class LogItem {
   constructor (time, status, inputPins, outputPins) {
     this.time = time;
     this.status = status;
+    this.changed = status === 'changed';
     this.inputPins = inputPins;
     this.outputPins = outputPins;
+  }
+
+  // For searching/comparing
+  toString () {
+    return `[${this.time}] ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
   }
 
   toComponent () {
     // Determine Bootstrap Badge color from status
     let statusVariant;
-    if (this.status === 'changed') statusVariant = 'success';
-    else if (this.status === 'unchanged') statusVariant = 'primary';
+    if (this.changed) statusVariant = 'success';
+    else  statusVariant = 'primary';
 
     return (
       <div>
@@ -53,7 +59,7 @@ class LogItem {
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
         {/* Add spaces as padding for alignment*/}
-        {this.status === 'changed' && <samp style={{whiteSpace: 'pre'}}>  </samp>}
+        {this.changed && <samp style={{whiteSpace: 'pre'}}>  </samp>}
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
@@ -152,7 +158,12 @@ export default class LogWindow extends Component {
                   </InputGroup>
                 </Form>
                 <Container className={'log-container'}>
-                  {this.state.items.map(item => {
+                  {this.state.items.filter((item) => {
+                    if (this.state.filterText) {
+                      return item.toString().includes(this.state.filterText);
+                    }
+                    return true;
+                  }).map(item => {
                     if (typeof item === 'string') return (
                       <div>
                         <samp>
