@@ -11,6 +11,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from "react-bootstrap/Button";
 import moment from 'moment'
 import "bootstrap-icons/font/bootstrap-icons.css";
+import {createPortal} from "react-dom";
+
 
 
 class ModemSelect extends Component {
@@ -82,20 +84,23 @@ class ModemSelect extends Component {
                 <i className="bi bi-funnel"></i>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{width: '15rem', zIndex: 9999, position: 'relative'}}>
-                <h6 className={'mx-1'}>Filter by organization</h6>
-                <Select
-                  className={'mx-1'}
-                  value={this.state.selectedOrgOption}
-                  onChange={this.orgSelectChange}
-                  options={[...new Set(this.props.modemList.map((modem) => (modem.org)))].map((org) => ({
-                    value: org,
-                    label: org
-                  }))}
-                  menuPortalTarget={document.querySelector('body')}
-                  isSearchable={true}
-                />
-              </Dropdown.Menu>
+              {createPortal(
+                <Dropdown.Menu style={{width: '15rem'}}>
+                  <h6 className={'mx-1'}>Filter by organization</h6>
+                  <Select
+                    className={'mx-1'}
+                    value={this.state.selectedOrgOption}
+                    onChange={this.orgSelectChange}
+                    options={[...new Set(this.props.modemList.map((modem) => (modem.org)))].map((org) => ({
+                      value: org,
+                      label: org
+                    }))}
+                    menuPortalTarget={document.querySelector('body')}
+                    isSearchable={true}
+                  />
+                </Dropdown.Menu>,
+                document.body
+              )}
             </Dropdown>
           </Column>
         </Row>
