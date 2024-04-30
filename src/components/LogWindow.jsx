@@ -130,7 +130,7 @@ export default class LogWindow extends Component {
     this.setState({filterText: event.target.value});
   }
 
-  handleStatusFilterChange (change) {
+  handleStatusFilterChange = async (change) => {
     this.setState({filterStatusOption: change});
   }
 
@@ -153,7 +153,7 @@ export default class LogWindow extends Component {
         <Card.Text>
           <Container className={'log-container'}>
             <Form>
-              <InputGroup size={'sm'} style={{width: '15rem'}}>
+              <InputGroup size={'sm'}>
                 <InputGroup.Text>
                   <i className="bi bi-filter"></i>
                 </InputGroup.Text>
@@ -166,6 +166,12 @@ export default class LogWindow extends Component {
                   options={this.statusOptions}
                   defaultValue={this.statusOptions[0]}
                   menuPortalTarget={document.querySelector('body')}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      width: '12rem'
+                    }),
+                  }}
                 />
               </InputGroup>
             </Form>
