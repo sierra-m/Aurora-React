@@ -70,7 +70,7 @@ const SelectedFlightData = ({
   };
 
   const openGoogleMaps = (lat, lng) => {
-    window.open(`https://www.google.com/maps/q=${lat},${lng}`);
+    window.open(`https://maps.google.com/?q=${lat},${lng}`);
   }
 
   return (
