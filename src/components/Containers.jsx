@@ -36,7 +36,7 @@ import moment from 'moment'
 import { dispMetersFeetBr, dispMetersFeet, mpsToFps, kphToMph } from '../util/helpers'
 import '../style/containers.css'
 import Badge from "react-bootstrap/Badge";
-import {spawn} from 'child_process';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 const SelectedFlightData = ({
@@ -70,13 +70,9 @@ const SelectedFlightData = ({
     }
   };
 
-  const openGoogleEarth = (uid) => {
-    try {
-      window.open(`googleearth:///api/flight?uid=${uid}&format=kml`)
-    } catch (e) {
-      alert(`File fetch failed: ${e}`)
-    }
-  };
+  const openGoogleMaps = (lat, lng) => {
+    window.open(`https://www.google.com/maps/@${lat},${lng},14z`);
+  }
 
   return (
     <div>
@@ -107,6 +103,7 @@ const SelectedFlightData = ({
       <hr/>
 
       <Card.Subtitle>Current Point</Card.Subtitle>
+      <hr/>
       <Form className={'my-1'}>
         <Form.Group>
           <Form.Label column={false}>Location</Form.Label>
@@ -124,6 +121,10 @@ const SelectedFlightData = ({
             </InputGroup.Append>
           </InputGroup>
         </Form.Group>
+        <Button size={'sm'} variant={'outline-success'} onClick={() => openGoogleMaps(lat, long)}>
+          Open in Google Maps
+          <i className="bi bi-box-arrow-up-right pl-1"></i>
+        </Button>
       </Form>
       <Card.Text className={'my-1'} style={{fontSize: '10pt'}}><strong>Altitude:</strong> {dispMetersFeet(altitude)}
       </Card.Text>
@@ -149,7 +150,6 @@ const SelectedFlightData = ({
           <Dropdown.Item eventKey="csv">CSV</Dropdown.Item>
           <Dropdown.Item eventKey="kml">KML</Dropdown.Item>
         </DropdownButton>
-        <Button variant="outline-success" onClick={() => openGoogleEarth(uid)}>Google Earth</Button>
       </ButtonGroup>
       <Card.Subtitle className={'mb-2 mt-3'}>Statistics</Card.Subtitle>
       <div>
