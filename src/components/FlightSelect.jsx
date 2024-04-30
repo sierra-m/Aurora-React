@@ -82,7 +82,7 @@ class ModemSelect extends Component {
                 <i className="bi bi-funnel"></i>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{width: '15rem', zIndex: 9999}}>
+              <Dropdown.Menu style={{width: '15rem', zIndex: 9999, position: relative}}>
                 <h6 className={'mx-1'}>Filter by organization</h6>
                 <Select
                   className={'mx-1'}
