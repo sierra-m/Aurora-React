@@ -42,7 +42,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 const SelectedFlightData = ({
     modem,
     date,
-    uid,
     datetime,
     duration,
     lat,
@@ -71,7 +70,7 @@ const SelectedFlightData = ({
   };
 
   const openGoogleMaps = (lat, lng) => {
-    window.open(`https://www.google.com/maps/@${lat},${lng},14z`);
+    window.open(`https://www.google.com/maps/q=${lat},${lng}`);
   }
 
   return (
@@ -102,7 +101,7 @@ const SelectedFlightData = ({
       </Card.Text>
       <hr/>
 
-      <Card.Subtitle>Current Point</Card.Subtitle>
+      <Card.Subtitle><h5>Current Point</h5></Card.Subtitle>
       <hr/>
       <Form className={'my-1'}>
         <Form.Group>
