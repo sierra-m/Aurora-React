@@ -280,7 +280,7 @@ export default class FlightSelect extends Component {
             </Row>
           </Tab.Pane>
           <Tab.Pane eventKey="by-date">
-            <Row className={'mt-2'}>
+            <Row className={'mt-3'}>
               <Column>
                 <Form>
                   <Form.Group className="mb-3" controlId="by-date-form.date-select">
