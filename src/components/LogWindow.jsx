@@ -179,7 +179,7 @@ export default class LogWindow extends Component {
               <Card.Text>
                 <Container className={'log-container'}>
                   {this.state.items.filter((item) => {
-                    if (this.state.filterStatusOption) {
+                    if (this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any') {
                       return item.status === this.state.filterStatusOption.value;
                     }
                     return true;

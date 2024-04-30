@@ -72,16 +72,17 @@ class ModemSelect extends Component {
               isSearchable={true}
               isClearable={true}
               autoFocus={true}
+              isDisabled={this.props.isDisabled}
             />
           </Column>
           {/* Button for filter by organization */}
           <Column xs={3} className={'px-0 mx-0'}>
-            <Dropdown alignRight={true} style={{zIndex: 2000}}>
-              <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+            <Dropdown alignRight={true}>
+              <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="dropdown-basic">
                 <i className="bi bi-funnel"></i>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu style={{width: '15rem'}}>
+              <Dropdown.Menu style={{width: '15rem', zIndex: 9999}}>
                 <h6 className={'mx-1'}>Filter by organization</h6>
                 <Select
                   className={'mx-1'}
@@ -247,6 +248,7 @@ export default class FlightSelect extends Component {
                   modemList={this.props.modemList}
                   handleModemSelected={(modem) => this.handleModemSelected(modem, true)}
                   handleModemCleared={() => this.handleModemCleared(true)}
+                  isDisabled={false}
                 />
               </Column>
             </Row>
@@ -301,6 +303,7 @@ export default class FlightSelect extends Component {
                   modemList={this.props.modemsByDateList.map((flight) => (flight.modem))}
                   handleModemSelected={(modem) => this.handleModemSelected(modem, false)}
                   handleModemCleared={() => this.handleModemCleared(false)}
+                  isDisabled={!this.state.selectedDate}
                 />
               </Column>
             </Row>
