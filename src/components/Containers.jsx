@@ -36,11 +36,13 @@ import moment from 'moment'
 import { dispMetersFeetBr, dispMetersFeet, mpsToFps, kphToMph } from '../util/helpers'
 import '../style/containers.css'
 import Badge from "react-bootstrap/Badge";
+import {spawn} from 'child_process';
 
 
 const SelectedFlightData = ({
     modem,
     date,
+    uid,
     datetime,
     duration,
     lat,
@@ -65,6 +67,14 @@ const SelectedFlightData = ({
     if (state.locationControl) {
       state.locationControl.select();
       document.execCommand('copy')
+    }
+  };
+
+  const openGoogleEarth = (uid) => {
+    try {
+      window.open(`googleearth:///api/flight?uid=${uid}&format=kml`)
+    } catch (e) {
+      alert(`File fetch failed: ${e}`)
     }
   };
 
@@ -139,6 +149,7 @@ const SelectedFlightData = ({
           <Dropdown.Item eventKey="csv">CSV</Dropdown.Item>
           <Dropdown.Item eventKey="kml">KML</Dropdown.Item>
         </DropdownButton>
+        <Button variant="outline-success" onClick={() => openGoogleEarth(uid)}>Google Earth</Button>
       </ButtonGroup>
       <Card.Subtitle className={'mb-2 mt-3'}>Statistics</Card.Subtitle>
       <div>

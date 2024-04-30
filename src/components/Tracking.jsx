@@ -635,6 +635,7 @@ class Tracking extends Component {
                     <SelectedFlightData
                       modem={this.state.selectedModem}
                       date={this.state.currentFlight.start_date.format('MMMM Do, YYYY')}
+                      uid={this.state.currentFlight.uid}
                       datetime={this.state.selectedPosition.datetime.format('YYYY-MM-DD HH:mm:ss')}
                       duration={moment.duration(this.state.selectedPosition.datetime.utc().diff(this.state.currentFlight.firstPoint().datetime.utc())).humanize()}
                       max_altitude={this.state.currentFlight.stats.max_altitude}
