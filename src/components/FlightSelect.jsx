@@ -76,7 +76,7 @@ class ModemSelect extends Component {
           </Column>
           {/* Button for filter by organization */}
           <Column xs={3} className={'px-0 mx-0'}>
-            <Dropdown alignRight={true} style={{zIndex: 1000}}>
+            <Dropdown alignRight={true} style={{zIndex: 2000}}>
               <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
                 <i className="bi bi-funnel"></i>
               </Dropdown.Toggle>
