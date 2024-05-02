@@ -46,6 +46,7 @@ import AltitudeChart from './AltitudeChart'
 import LandingPrediction from '../util/landing'
 import LogWindow, {LogItem} from './LogWindow'
 import { SelectedFlightData, ActiveFlight } from "./Containers";
+import FlightSelect from "./FlightSelect";
 
 import { Flight } from '../util/flight'
 import { getVelocity } from "../util/velocity";
@@ -114,6 +115,7 @@ class Tracking extends Component {
   state = {
     modemList: [],
     flightList: [],
+    modemsByDateList: [],
 
     // Current flight selected by dropdowns
     currentFlight: null,
@@ -209,6 +211,29 @@ class Tracking extends Component {
       console.log(e);
     }
   };
+
+  fetchModemsByDate = async (date) => {
+    try {
+      const res = await fetch(`/api/meta/search?date=${date}`);
+      const data = await res.json();
+      if (res.status !== 200) {
+        console.log(`Error modems by date: ${data}`);
+      }
+      if (data.found > 0) {
+        // Set callbacks for map display
+        for (const result of data.results) {
+          result.callback = async () => {
+            await this.fetchFlight(result.uid);
+          }
+        }
+        this.setState({modemsByDateList: data.results});
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   /**
    * Flight selection callback
@@ -457,6 +482,7 @@ class Tracking extends Component {
                 landingZone={Math.random() && this.state.landingZone}
                 selectPosition={this.setSelectedPosition}
                 activeFlights={this.state.activeFlights}
+                modemsByDateList={this.state.modemsByDateList}
               />
             </div>
             {this.state.currentFlight &&
@@ -476,24 +502,16 @@ class Tracking extends Component {
                 </Card.Header>
                 <Accordion.Collapse eventKey="flight-select">
                   <Card.Body>
-                    <h6>Select Modem</h6>
-                    <Select
-                      value={this.state.selectedModemOption}
-                      onChange={this.imeiSelectChange}
-                      options={this.state.modemList.map((modem) => ({value: modem.name, label: `(${modem.partialImei}) ${modem.name}`}))}
-                      menuPortalTarget={document.querySelector('body')}
-                      isSearchable={true}
-                      isClearable={true}
-                      autoFocus={true}
-                    />
-                    <h6 className={'mt-2'}>Select Flight</h6>
-                    <Select
-                      value={this.state.selectedFlightOption}
-                      onChange={this.flightSelectChange}
-                      options={this.state.flightList.map((x, index) => ({value: x.uid, label: `${index+1}: ${x.date}`})).reverse()}
-                      menuPortalTarget={document.querySelector('body')}
-                      isSearchable={true}
-                      isDisabled={this.state.flightList.length < 1}
+                    <FlightSelect
+                      modemList={this.state.modemList}
+                      flightDateList={this.state.flightList}
+                      modemsByDateList={this.state.modemsByDateList}
+                      fetchFlightsFrom={this.fetchFlightsFrom}
+                      fetchModemsByDate={this.fetchModemsByDate}
+                      fetchFlight={this.fetchFlight}
+                      clearFlightDateList={() => {this.setState({flightList: []})}}
+                      clearModemsByDateList={() => {this.setState({modemsByDateList: []})}}
+                      clearSelectedFlight={() => {this.setState({currentFlight: null, selectedPosition: null})}}
                     />
                   </Card.Body>
                 </Accordion.Collapse>

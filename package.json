@@ -5,6 +5,7 @@
   "dependencies": {
     "big-integer": "^1.6.44",
     "bootstrap": "^4.3.1",
+    "bootstrap-icons": "^1.11.3",
     "chartjs-plugin-zoom": "^0.7.3",
     "constantinople": "^4.0.1",
     "eslint-utils": "^1.4.2",

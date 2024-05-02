@@ -36,6 +36,7 @@ import moment from 'moment'
 import { dispMetersFeetBr, dispMetersFeet, mpsToFps, kphToMph } from '../util/helpers'
 import '../style/containers.css'
 import Badge from "react-bootstrap/Badge";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 const SelectedFlightData = ({
@@ -68,6 +69,10 @@ const SelectedFlightData = ({
     }
   };
 
+  const openGoogleMaps = (lat, lng) => {
+    window.open(`https://maps.google.com/?q=${lat},${lng}`);
+  }
+
   return (
     <div>
       {isActive &&
@@ -96,7 +101,8 @@ const SelectedFlightData = ({
       </Card.Text>
       <hr/>
 
-      <Card.Subtitle>Current Point</Card.Subtitle>
+      <Card.Subtitle><h5>Current Point</h5></Card.Subtitle>
+      <hr/>
       <Form className={'my-1'}>
         <Form.Group>
           <Form.Label column={false}>Location</Form.Label>
@@ -114,6 +120,10 @@ const SelectedFlightData = ({
             </InputGroup.Append>
           </InputGroup>
         </Form.Group>
+        <Button size={'sm'} variant={'outline-success'} onClick={() => openGoogleMaps(lat, long)}>
+          Open in Google Maps
+          <i className="bi bi-box-arrow-up-right pl-1"></i>
+        </Button>
       </Form>
       <Card.Text className={'my-1'} style={{fontSize: '10pt'}}><strong>Altitude:</strong> {dispMetersFeet(altitude)}
       </Card.Text>

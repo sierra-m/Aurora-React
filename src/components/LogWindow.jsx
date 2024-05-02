@@ -28,28 +28,39 @@ import '../style/logwindow.css'
 import Container from 'react-bootstrap/Container'
 import Badge from 'react-bootstrap/Badge'
 import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import moment from 'moment'
+import Select from 'react-select'
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 class LogItem {
   constructor (time, status, inputPins, outputPins) {
     this.time = time;
     this.status = status;
+    this.changed = status === 'changed';
     this.inputPins = inputPins;
     this.outputPins = outputPins;
   }
 
+  // For searching/comparing
+  toString () {
+    return `[${this.time}] ${this.status} ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
+  }
+
   toComponent () {
     // Determine Bootstrap Badge color from status
-    let statusVariant = 'primary';
-    if (this.status === 'changed') statusVariant = 'success';
-    else if (this.status === 'unchanged') statusVariant = 'primary';
+    let statusVariant;
+    if (this.changed) statusVariant = 'success';
+    else  statusVariant = 'primary';
 
     return (
       <div>
         <ColorSamp color={'#d300a4'}>[{this.time}] </ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
+        {/* Add spaces as padding for alignment*/}
+        {this.changed && <samp style={{whiteSpace: 'pre'}}>  </samp>}
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
@@ -66,8 +77,15 @@ export default class LogWindow extends Component {
   lastOutputPins = null;
   state = {
     items: [],
-    autoscroll: true
+    autoscroll: true,
+    filterText: '',
+    filterStatusOption: null
   };
+
+  statusOptions = ['Any', 'Changed', 'Unchanged'].map((item) => ({
+    label: item,
+    value: item.toLowerCase()
+  }));
 
   defaultProps = {
     autoscroll: true
@@ -108,6 +126,14 @@ export default class LogWindow extends Component {
     this.setState({items: []});
   }
 
+  handleFilterChange (event) {
+    this.setState({filterText: event.target.value});
+  }
+
+  handleStatusFilterChange = async (change) => {
+    this.setState({filterStatusOption: change});
+  }
+
   componentDidMount () {
     if (this.props.registerControls !== null) {
       this.props.registerControls(this.print, this.clear);
@@ -126,10 +152,35 @@ export default class LogWindow extends Component {
         <Card.Header>{this.props.title}</Card.Header>
         <Card.Text>
           <Container className={'log-container'}>
+            <Form>
+              <InputGroup size={'sm'}>
+                <InputGroup.Text>
+                  <i className="bi bi-filter"></i>
+                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Status:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Select
+                  value={this.state.filterStatusOption}
+                  onChange={this.handleStatusFilterChange}
+                  options={this.statusOptions}
+                  defaultValue={this.statusOptions[0]}
+                  menuPortalTarget={document.querySelector('body')}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      width: '12rem'
+                    }),
+                  }}
+                />
+              </InputGroup>
+            </Form>
             <Card className={'log-card'}>
               <Card.Text>
                 <Container className={'log-container'}>
-                  {this.state.items.map(item => {
+                  {((this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any')
+                    ? this.state.items.filter(item => item.status === this.state.filterStatusOption.value)
+                    : this.state.items).map(item => {
                     if (typeof item === 'string') return (
                       <div>
                         <samp>

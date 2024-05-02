@@ -251,7 +251,8 @@ class BaseMap extends Component {
             zIndex={3}
           />
         }
-        {(this.props.activeFlights.length > 0 && !this.props.selectedPosition) && this.props.activeFlights.map(partial => (
+        {(this.props.activeFlights.length > 0 && !this.props.selectedPosition && this.props.modemsByDateList.length === 0) &&
+          this.props.activeFlights.map(partial => (
           <Marker
             position={{lat: partial.latitude, lng: partial.longitude}}
             icon={{
@@ -261,6 +262,19 @@ class BaseMap extends Component {
             onClick={partial.callback}
           />
         ))}
+        {
+          (this.props.modemsByDateList.length > 0 && !this.props.selectedPosition) &&
+          this.props.modemsByDateList.map((flight) => (
+            <Marker
+              position={{lat: flight.startPoint.lat, lng: flight.startPoint.lng}}
+              icon={{
+                url: chooseRandomIcon(flight.uid),
+                scaledSize: {width: 34, height: 48}
+              }}
+              onClick={flight.callback}
+            />
+          ))
+        }
         {this.props.landingZone &&
         <Circle
           center={this.props.landingZone}
