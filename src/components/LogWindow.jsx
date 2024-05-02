@@ -178,12 +178,9 @@ export default class LogWindow extends Component {
             <Card className={'log-card'}>
               <Card.Text>
                 <Container className={'log-container'}>
-                  {this.state.items.filter((item) => {
-                    if (this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any') {
-                      return item.status === this.state.filterStatusOption.value;
-                    }
-                    return true;
-                  }).map(item => {
+                  {((this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any')
+                    ? this.state.items.filter(item => item.status === this.state.filterStatusOption.value)
+                    : this.state.items).map(item => {
                     if (typeof item === 'string') return (
                       <div>
                         <samp>
