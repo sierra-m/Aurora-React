@@ -209,9 +209,9 @@ export default class LogWindow extends Component {
               </Dropdown.Toggle>
 
               {createPortal(
-                <Dropdown.Menu style={{width: '24rem'}}>
+                <Dropdown.Menu style={{width: '24rem', border: `1px solid rgb(61, 139, 253)`}}>
                   <Form>
-                    <InputGroup size={'sm'} className={'mb-3'}>
+                    <InputGroup size={'sm'} className={'mb-3 ml-3'}>
                       <InputGroup.Text>
                         <i className="bi bi-filter"></i>
                       </InputGroup.Text>
@@ -223,7 +223,6 @@ export default class LogWindow extends Component {
                         onChange={this.handleStatusFilterChange}
                         options={this.statusOptions}
                         defaultValue={this.statusOptions[0]}
-                        menuPortalTarget={document.querySelector('body')}
                         styles={{
                           control: (baseStyles, state) => ({
                             ...baseStyles,
@@ -232,7 +231,7 @@ export default class LogWindow extends Component {
                         }}
                       />
                     </InputGroup>
-                    <InputGroup size={'sm'} className={'mb-3'}>
+                    <InputGroup size={'sm'} className={'mb-3 ml-3'}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Input Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
@@ -249,7 +248,7 @@ export default class LogWindow extends Component {
                         }}
                       />
                     </InputGroup>
-                    <InputGroup size={'sm'}>
+                    <InputGroup size={'sm'} className={'ml-3'}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Output Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
