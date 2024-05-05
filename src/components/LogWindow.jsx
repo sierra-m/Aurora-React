@@ -150,12 +150,10 @@ export default class LogWindow extends Component {
   }
 
   handleInputPinsFilterChange = async (change) => {
-    console.log(`filterInput change: ${JSON.stringify(change)}`);
     this.setState({filterInputOptions: change})
   }
 
   handleOutputPinsFilterChange = async (change) => {
-    console.log(`filterOutput change: ${JSON.stringify(change)}`);
     this.setState({filterOutputOptions: change})
   }
 
@@ -176,10 +174,10 @@ export default class LogWindow extends Component {
       items = items.filter(item => item.status === this.state.filterStatusOption.value);
     }
     if (this.inputFilterActive()) {
-      items = items.filter(item => this.state.filterInputOptions.find(option => option.value === item));
+      items = items.filter(item => this.state.filterInputOptions.find(option => option.value === item.inputPins));
     }
     if (this.outputFilterActive()) {
-      items = items.filter(item => this.state.filterOutputOptions.find(option => option.value === item));
+      items = items.filter(item => this.state.filterOutputOptions.find(option => option.value === item.outputPins));
     }
     return items;
   }
