@@ -231,7 +231,7 @@ export default class LogWindow extends Component {
         </Card.Text>
         <Card.Footer>
           <Row>
-            <Column xs={2}>
+            <Column xs={"auto"}>
               <Dropdown drop={'up'}>
                 <Dropdown.Toggle
                   disabled={this.props.isDisabled}
