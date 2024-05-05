@@ -219,18 +219,14 @@ export default class LogWindow extends Component {
                       <InputGroup.Prepend>
                         <InputGroup.Text>Status:</InputGroup.Text>
                       </InputGroup.Prepend>
-                      <Select
-                        value={this.state.filterStatusOption}
-                        onChange={this.handleStatusFilterChange}
-                        options={this.statusOptions}
-                        defaultValue={this.statusOptions[0]}
-                        // styles={{
-                        //   control: (baseStyles, state) => ({
-                        //     ...baseStyles,
-                        //     width: '12rem',
-                        //   }),
-                        // }}
-                      />
+                      <div className={'react-select form-control p-0'}>
+                        <Select
+                          value={this.state.filterStatusOption}
+                          onChange={this.handleStatusFilterChange}
+                          options={this.statusOptions}
+                          defaultValue={this.statusOptions[0]}
+                        />
+                      </div>
                     </InputGroup>
                     <InputGroup size={'sm'} className={'mb-3 ml-3'}>
                       <InputGroup.Prepend>

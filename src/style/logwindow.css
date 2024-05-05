@@ -15,3 +15,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+.react-select > div {
+    margin: -1px;
+}
