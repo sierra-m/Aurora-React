@@ -231,7 +231,7 @@ export default class LogWindow extends Component {
         </Card.Text>
         <Card.Footer>
           <Row>
-            <Column>
+            <Column xs={2}>
               <Form>
                 <Form.Check
                   type={"checkbox"}
@@ -243,7 +243,7 @@ export default class LogWindow extends Component {
               </Form>
             </Column>
             <Column>
-              <Dropdown className={'float-right'} drop={'up'}>
+              <Dropdown drop={'up'} alignRight={true}>
                 <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
                   Filter
                   <i className="bi bi-filter pl-1"></i>
