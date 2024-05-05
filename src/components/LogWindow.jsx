@@ -215,7 +215,7 @@ export default class LogWindow extends Component {
                   backgroundColor: 'rgba(255, 255, 255, 0.8)'
                 }}>
                   <Form>
-                    <InputGroup size={'sm'} className={'mb-3 ml-3'} style={{width: '20rem'}}>
+                    <InputGroup className={'mb-3 ml-3'} style={{width: '20rem'}}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Status:</InputGroup.Text>
                       </InputGroup.Prepend>
@@ -228,39 +228,31 @@ export default class LogWindow extends Component {
                         />
                       </div>
                     </InputGroup>
-                    <InputGroup size={'sm'} className={'mb-3 ml-3'}>
+                    <InputGroup className={'mb-3 ml-3'}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Input Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
-                      <Select
-                        value={this.state.filterInputOptions}
-                        onChange={this.handleInputPinsFilterChange}
-                        isMulti
-                        options={this.inputPinOptions}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            width: '12rem',
-                          }),
-                        }}
-                      />
+                      <div className={'react-select form-control p-0'}>
+                        <Select
+                          value={this.state.filterInputOptions}
+                          onChange={this.handleInputPinsFilterChange}
+                          isMulti
+                          options={this.inputPinOptions}
+                        />
+                      </div>
                     </InputGroup>
-                    <InputGroup size={'sm'} className={'ml-3'}>
+                    <InputGroup className={'ml-3'}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Output Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
-                      <Select
-                        value={this.state.filterOutputOptions}
-                        onChange={this.handleOutputPinsFilterChange}
-                        isMulti
-                        options={this.outputPinOptions}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            width: '12rem',
-                          }),
-                        }}
-                      />
+                      <div className={'react-select form-control p-0'}>
+                        <Select
+                          value={this.state.filterOutputOptions}
+                          onChange={this.handleOutputPinsFilterChange}
+                          isMulti
+                          options={this.outputPinOptions}
+                        />
+                      </div>
                     </InputGroup>
                   </Form>
                 </Dropdown.Menu>,
