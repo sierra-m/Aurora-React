@@ -232,18 +232,7 @@ export default class LogWindow extends Component {
         <Card.Footer>
           <Row>
             <Column xs={2}>
-              <Form>
-                <Form.Check
-                  type={"checkbox"}
-                  id={"autoscroll-check"}
-                  label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
-                  onClick={() => this.setState({autoscroll: !this.state.autoscroll})}
-                  checked={this.state.autoscroll}
-                />
-              </Form>
-            </Column>
-            <Column>
-              <Dropdown drop={'up'} alignRight={true}>
+              <Dropdown drop={'up'}>
                 <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
                   Filter
                   <i className="bi bi-filter pl-1"></i>
@@ -300,6 +289,17 @@ export default class LogWindow extends Component {
                   document.body
                 )}
               </Dropdown>
+            </Column>
+            <Column>
+              <Form>
+                <Form.Check
+                  type={"checkbox"}
+                  id={"autoscroll-check"}
+                  label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
+                  onClick={() => this.setState({autoscroll: !this.state.autoscroll})}
+                  checked={this.state.autoscroll}
+                />
+              </Form>
             </Column>
           </Row>
         </Card.Footer>
