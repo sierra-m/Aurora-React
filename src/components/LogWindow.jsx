@@ -217,7 +217,8 @@ export default class LogWindow extends Component {
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      width: '12rem'
+                      width: '12rem',
+                      height: '1.3rem'
                     }),
                   }}
                 />
@@ -232,7 +233,8 @@ export default class LogWindow extends Component {
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      width: '12rem'
+                      width: '12rem',
+                      height: '1.3rem'
                     }),
                   }}
                 />
@@ -247,7 +249,8 @@ export default class LogWindow extends Component {
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      width: '12rem'
+                      width: '12rem',
+                      height: '1.3rem'
                     }),
                   }}
                 />
