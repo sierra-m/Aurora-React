@@ -34,6 +34,8 @@ import Select from 'react-select'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import {createPortal} from "react-dom";
+import Column from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 
 class LogItem {
@@ -202,63 +204,7 @@ export default class LogWindow extends Component {
         <Card.Header>{this.props.title}</Card.Header>
         <Card.Text>
           <Container className={'log-container'}>
-            <Dropdown>
-              <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
-                Filter
-                <i className="bi bi-filter pl-1"></i>
-              </Dropdown.Toggle>
 
-              {createPortal(
-                <Dropdown.Menu style={{
-                  width: '24rem',
-                  border: `1px solid rgb(61, 139, 253)`,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)'
-                }}>
-                  <Form>
-                    <InputGroup className={'mb-3 ml-3'} style={{width: '20rem'}}>
-                      <InputGroup.Prepend>
-                        <InputGroup.Text>Status:</InputGroup.Text>
-                      </InputGroup.Prepend>
-                      <div className={'react-select form-control p-0'}>
-                        <Select
-                          value={this.state.filterStatusOption}
-                          onChange={this.handleStatusFilterChange}
-                          options={this.statusOptions}
-                          defaultValue={this.statusOptions[0]}
-                        />
-                      </div>
-                    </InputGroup>
-                    <InputGroup className={'mb-3 ml-3'} style={{width: '20rem'}}>
-                      <InputGroup.Prepend>
-                        <InputGroup.Text>Input Pins:</InputGroup.Text>
-                      </InputGroup.Prepend>
-                      <div className={'react-select form-control p-0'}>
-                        <Select
-                          value={this.state.filterInputOptions}
-                          onChange={this.handleInputPinsFilterChange}
-                          isMulti
-                          options={this.inputPinOptions}
-                        />
-                      </div>
-                    </InputGroup>
-                    <InputGroup className={'ml-3'} style={{width: '20rem'}}>
-                      <InputGroup.Prepend>
-                        <InputGroup.Text>Output Pins:</InputGroup.Text>
-                      </InputGroup.Prepend>
-                      <div className={'react-select form-control p-0'}>
-                        <Select
-                          value={this.state.filterOutputOptions}
-                          onChange={this.handleOutputPinsFilterChange}
-                          isMulti
-                          options={this.outputPinOptions}
-                        />
-                      </div>
-                    </InputGroup>
-                  </Form>
-                </Dropdown.Menu>,
-                document.body
-              )}
-            </Dropdown>
             <Card className={'log-card'}>
               <Card.Text>
                 <Container className={'log-container'}>
@@ -284,15 +230,78 @@ export default class LogWindow extends Component {
           </Container>
         </Card.Text>
         <Card.Footer>
-          <Form>
-            <Form.Check
-              type={"checkbox"}
-              id={"autoscroll-check"}
-              label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
-              onClick={() => this.setState({autoscroll: !this.state.autoscroll})}
-              checked={this.state.autoscroll}
-            />
-          </Form>
+          <Row>
+            <Column>
+              <Form>
+                <Form.Check
+                  type={"checkbox"}
+                  id={"autoscroll-check"}
+                  label={`Autoscroll: ${this.state.autoscroll ? 'On' : 'Off'}`}
+                  onClick={() => this.setState({autoscroll: !this.state.autoscroll})}
+                  checked={this.state.autoscroll}
+                />
+              </Form>
+            </Column>
+            <Column>
+              <Dropdown className={'float-right'} drop={'up'}>
+                <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
+                  Filter
+                  <i className="bi bi-filter pl-1"></i>
+                </Dropdown.Toggle>
+
+                {createPortal(
+                  <Dropdown.Menu style={{
+                    width: '24rem',
+                    border: `1px solid rgb(61, 139, 253)`,
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+                  }}>
+                    <Form>
+                      <InputGroup className={'mb-3 ml-3'} style={{width: '22rem'}}>
+                        <InputGroup.Prepend>
+                          <InputGroup.Text>Status:</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <div className={'react-select form-control p-0'}>
+                          <Select
+                            value={this.state.filterStatusOption}
+                            onChange={this.handleStatusFilterChange}
+                            options={this.statusOptions}
+                            defaultValue={this.statusOptions[0]}
+                          />
+                        </div>
+                      </InputGroup>
+                      <InputGroup className={'mb-3 ml-3'} style={{width: '22rem'}}>
+                        <InputGroup.Prepend>
+                          <InputGroup.Text>Input Pins:</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <div className={'react-select form-control p-0'}>
+                          <Select
+                            value={this.state.filterInputOptions}
+                            onChange={this.handleInputPinsFilterChange}
+                            isMulti
+                            options={this.inputPinOptions}
+                          />
+                        </div>
+                      </InputGroup>
+                      <InputGroup className={'ml-3'} style={{width: '22rem'}}>
+                        <InputGroup.Prepend>
+                          <InputGroup.Text>Output Pins:</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <div className={'react-select form-control p-0'}>
+                          <Select
+                            value={this.state.filterOutputOptions}
+                            onChange={this.handleOutputPinsFilterChange}
+                            isMulti
+                            options={this.outputPinOptions}
+                          />
+                        </div>
+                      </InputGroup>
+                    </Form>
+                  </Dropdown.Menu>,
+                  document.body
+                )}
+              </Dropdown>
+            </Column>
+          </Row>
         </Card.Footer>
       </Card>
     )
