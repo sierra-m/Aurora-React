@@ -221,8 +221,6 @@ export default class LogWindow extends Component {
                     }),
                   }}
                 />
-              </InputGroup>
-              <InputGroup>
                 <InputGroup.Prepend>
                   <InputGroup.Text>Input Pins:</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -238,8 +236,6 @@ export default class LogWindow extends Component {
                     }),
                   }}
                 />
-              </InputGroup>
-              <InputGroup>
                 <InputGroup.Prepend>
                   <InputGroup.Text>Output Pins:</InputGroup.Text>
                 </InputGroup.Prepend>
