@@ -75,17 +75,32 @@ export default class LogWindow extends Component {
   // Defined outside of state as these need to update immediately
   lastInputPins = null;
   lastOutputPins = null;
-  state = {
-    items: [],
-    autoscroll: true,
-    filterText: '',
-    filterStatusOption: null
-  };
 
-  statusOptions = ['Any', 'Changed', 'Unchanged'].map((item) => ({
-    label: item,
-    value: item.toLowerCase()
-  }));
+  constructor(props) {
+    super(props);
+    this.statusOptions = ['Any', 'Changed', 'Unchanged'].map((item) => ({
+      label: item,
+      value: item.toLowerCase()
+    }));
+
+    this.inputPinOptions = [...Array(16).keys()].map(item => ({
+      label: item,
+      value: item
+    }))
+    this.outputPinOptions = [...Array(8).keys()].map(item => ({
+      label: item,
+      value: item
+    }))
+
+    this.state = {
+      items: [],
+      autoscroll: true,
+      filterText: '',
+      filterStatusOption: this.statusOptions[0],
+      filterInputOptions: null,
+      filterOutputOptions: null
+    };
+  }
 
   defaultProps = {
     autoscroll: true
@@ -134,6 +149,39 @@ export default class LogWindow extends Component {
     this.setState({filterStatusOption: change});
   }
 
+  handleInputPinsFilterChange = async (change) => {
+    this.setState({filterInputOptions: change})
+  }
+
+  handleOutputPinsFilterChange = async (change) => {
+    this.setState({filterInputOptions: change})
+  }
+
+  statusFilterActive () {
+    return this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any';
+  }
+
+  inputFilterActive () {
+    return this.state.inputPinOptions && this.state.inputPinOptions.length > 0;
+  }
+
+  outputFilterActive () {
+    return this.state.outputPinOptions && this.state.outputPinOptions.length > 0;
+  }
+
+  applyFilters (items) {
+    if (this.statusFilterActive()) {
+      items = items.filter(item => item.status === this.state.filterStatusOption.value);
+    }
+    if (this.inputFilterActive()) {
+      items = items.filter(item => this.state.filterInputOptions.find(option => option.value === item));
+    }
+    if (this.outputFilterActive()) {
+      items = items.filter(item => this.state.filterOutputOptions.find(option => option.value === item));
+    }
+    return items;
+  }
+
   componentDidMount () {
     if (this.props.registerControls !== null) {
       this.props.registerControls(this.print, this.clear);
@@ -174,12 +222,46 @@ export default class LogWindow extends Component {
                   }}
                 />
               </InputGroup>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Input Pins:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Select
+                  value={this.state.filterInputOptions}
+                  onChange={this.handleInputPinsFilterChange}
+                  isMulti
+                  options={this.inputPinOptions}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      width: '12rem'
+                    }),
+                  }}
+                />
+              </InputGroup>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Output Pins:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Select
+                  value={this.state.filterOutputOptions}
+                  onChange={this.handleOutputPinsFilterChange}
+                  isMulti
+                  options={this.outputPinOptions}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      width: '12rem'
+                    }),
+                  }}
+                />
+              </InputGroup>
             </Form>
             <Card className={'log-card'}>
               <Card.Text>
                 <Container className={'log-container'}>
-                  {((this.state.filterStatusOption && this.state.filterStatusOption.value !== 'any')
-                    ? this.state.items.filter(item => item.status === this.state.filterStatusOption.value)
+                  {((this.statusFilterActive() || this.inputFilterActive() || this.outputFilterActive())
+                    ? this.applyFilters(this.state.items)
                     : this.state.items).map(item => {
                     if (typeof item === 'string') return (
                       <div>
