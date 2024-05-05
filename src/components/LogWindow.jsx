@@ -150,11 +150,13 @@ export default class LogWindow extends Component {
   }
 
   handleInputPinsFilterChange = async (change) => {
+    console.log(`filterInput change: ${JSON.stringify(change)}`);
     this.setState({filterInputOptions: change})
   }
 
   handleOutputPinsFilterChange = async (change) => {
-    this.setState({filterInputOptions: change})
+    console.log(`filterOutput change: ${JSON.stringify(change)}`);
+    this.setState({filterOutputOptions: change})
   }
 
   statusFilterActive () {
