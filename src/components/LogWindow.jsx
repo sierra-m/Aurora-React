@@ -209,12 +209,13 @@ export default class LogWindow extends Component {
               </Dropdown.Toggle>
 
               {createPortal(
-                <Dropdown.Menu style={{width: '24rem', border: `1px solid rgb(61, 139, 253)`}}>
+                <Dropdown.Menu style={{
+                  width: '24rem',
+                  border: `1px solid rgb(61, 139, 253)`,
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                }}>
                   <Form>
                     <InputGroup size={'sm'} className={'mb-3 ml-3'}>
-                      <InputGroup.Text>
-                        <i className="bi bi-filter"></i>
-                      </InputGroup.Text>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Status:</InputGroup.Text>
                       </InputGroup.Prepend>
