@@ -215,7 +215,7 @@ export default class LogWindow extends Component {
                   backgroundColor: 'rgba(255, 255, 255, 0.8)'
                 }}>
                   <Form>
-                    <InputGroup size={'sm'} className={'mb-3 ml-3'}>
+                    <InputGroup size={'sm'} className={'mb-3 ml-3'} style={{width: '20rem'}}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Status:</InputGroup.Text>
                       </InputGroup.Prepend>
@@ -224,12 +224,12 @@ export default class LogWindow extends Component {
                         onChange={this.handleStatusFilterChange}
                         options={this.statusOptions}
                         defaultValue={this.statusOptions[0]}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            width: '12rem',
-                          }),
-                        }}
+                        // styles={{
+                        //   control: (baseStyles, state) => ({
+                        //     ...baseStyles,
+                        //     width: '12rem',
+                        //   }),
+                        // }}
                       />
                     </InputGroup>
                     <InputGroup size={'sm'} className={'mb-3 ml-3'}>
