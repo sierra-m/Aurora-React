@@ -228,7 +228,7 @@ export default class LogWindow extends Component {
                         />
                       </div>
                     </InputGroup>
-                    <InputGroup className={'mb-3 ml-3'}>
+                    <InputGroup className={'mb-3 ml-3'} style={{width: '20rem'}}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Input Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
@@ -241,7 +241,7 @@ export default class LogWindow extends Component {
                         />
                       </div>
                     </InputGroup>
-                    <InputGroup className={'ml-3'}>
+                    <InputGroup className={'ml-3'} style={{width: '20rem'}}>
                       <InputGroup.Prepend>
                         <InputGroup.Text>Output Pins:</InputGroup.Text>
                       </InputGroup.Prepend>
