@@ -32,6 +32,8 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import moment from 'moment'
 import Select from 'react-select'
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Dropdown from "react-bootstrap/Dropdown";
+import {createPortal} from "react-dom";
 
 
 class LogItem {
@@ -162,11 +164,11 @@ export default class LogWindow extends Component {
   }
 
   inputFilterActive () {
-    return this.state.inputPinOptions && this.state.inputPinOptions.length > 0;
+    return this.state.filterInputOptions && this.state.filterInputOptions.length > 0;
   }
 
   outputFilterActive () {
-    return this.state.outputPinOptions && this.state.outputPinOptions.length > 0;
+    return this.state.filterOutputOptions && this.state.filterOutputOptions.length > 0;
   }
 
   applyFilters (items) {
@@ -200,62 +202,75 @@ export default class LogWindow extends Component {
         <Card.Header>{this.props.title}</Card.Header>
         <Card.Text>
           <Container className={'log-container'}>
-            <Form>
-              <InputGroup size={'sm'}>
-                <InputGroup.Text>
-                  <i className="bi bi-filter"></i>
-                </InputGroup.Text>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Status:</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Select
-                  value={this.state.filterStatusOption}
-                  onChange={this.handleStatusFilterChange}
-                  options={this.statusOptions}
-                  defaultValue={this.statusOptions[0]}
-                  menuPortalTarget={document.querySelector('body')}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      width: '12rem',
-                      height: '1.3rem'
-                    }),
-                  }}
-                />
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Input Pins:</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Select
-                  value={this.state.filterInputOptions}
-                  onChange={this.handleInputPinsFilterChange}
-                  isMulti
-                  options={this.inputPinOptions}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      width: '12rem',
-                      height: '1.3rem'
-                    }),
-                  }}
-                />
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Output Pins:</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Select
-                  value={this.state.filterOutputOptions}
-                  onChange={this.handleOutputPinsFilterChange}
-                  isMulti
-                  options={this.outputPinOptions}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      width: '12rem',
-                      height: '1.3rem'
-                    }),
-                  }}
-                />
-              </InputGroup>
-            </Form>
+            <Dropdown>
+              <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
+                Filter
+                <i className="bi bi-filter pl-1"></i>
+              </Dropdown.Toggle>
+
+              {createPortal(
+                <Dropdown.Menu style={{width: '24rem'}}>
+                  <Form>
+                    <InputGroup size={'sm'} className={'mb-3'}>
+                      <InputGroup.Text>
+                        <i className="bi bi-filter"></i>
+                      </InputGroup.Text>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>Status:</InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Select
+                        value={this.state.filterStatusOption}
+                        onChange={this.handleStatusFilterChange}
+                        options={this.statusOptions}
+                        defaultValue={this.statusOptions[0]}
+                        menuPortalTarget={document.querySelector('body')}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            width: '12rem',
+                          }),
+                        }}
+                      />
+                    </InputGroup>
+                    <InputGroup size={'sm'} className={'mb-3'}>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>Input Pins:</InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Select
+                        value={this.state.filterInputOptions}
+                        onChange={this.handleInputPinsFilterChange}
+                        isMulti
+                        options={this.inputPinOptions}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            width: '12rem',
+                          }),
+                        }}
+                      />
+                    </InputGroup>
+                    <InputGroup size={'sm'}>
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>Output Pins:</InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Select
+                        value={this.state.filterOutputOptions}
+                        onChange={this.handleOutputPinsFilterChange}
+                        isMulti
+                        options={this.outputPinOptions}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            width: '12rem',
+                          }),
+                        }}
+                      />
+                    </InputGroup>
+                  </Form>
+                </Dropdown.Menu>,
+                document.body
+              )}
+            </Dropdown>
             <Card className={'log-card'}>
               <Card.Text>
                 <Container className={'log-container'}>
