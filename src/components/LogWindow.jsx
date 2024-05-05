@@ -233,7 +233,12 @@ export default class LogWindow extends Component {
           <Row>
             <Column xs={2}>
               <Dropdown drop={'up'}>
-                <Dropdown.Toggle disabled={this.props.isDisabled} variant="outline-primary" id="log-window-filter-dropdown">
+                <Dropdown.Toggle
+                  disabled={this.props.isDisabled}
+                  variant="outline-primary"
+                  id="log-window-filter-dropdown"
+                  size={'sm'}
+                >
                   Filter
                   <i className="bi bi-filter pl-1"></i>
                 </Dropdown.Toggle>
