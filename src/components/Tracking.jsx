@@ -287,7 +287,7 @@ class Tracking extends Component {
         const pinStates = this.state.currentFlight.pinStates();
         // Load pin states log
         for (const point of pinStates) {
-          this.pinLogPrint(point.input, point.output, point.timestamp);
+          this.pinLogPrint(point.input, point.output, point.timestamp, point.altitude);
         }
       });
       await this.props.history.push(`/tracking?uid=${compressedUid}`);
@@ -321,7 +321,7 @@ class Tracking extends Component {
           await this.state.landingPrediction.updateAltitudeProfile(updateIndicies[0], updateIndicies[updateIndicies.length - 1]);
 
           for (const point of data.result) {
-            this.pinLogPrint(point.input_pins, point.output_pins, moment.unix(point.datetime).format('YYYY-MM-DD HH:mm:ss'));
+            this.pinLogPrint(point.input_pins, point.output_pins, point.datetime, point.altitude);
           }
 
           let elevation = false;
@@ -670,9 +670,6 @@ class Tracking extends Component {
                     <Nav.Item>
                       <Nav.Link eventKey="wind-layers">Wind Layers</Nav.Link>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="pin-states">Pin States</Nav.Link>
-                    </Nav.Item>
                   </Nav>
                   <Tab.Content>
                     <Tab.Pane eventKey="altitude">
@@ -696,24 +693,29 @@ class Tracking extends Component {
                         Wind layer graph: coming soon! 🕝
                       </Alert>
                     </Tab.Pane>
-                    <Tab.Pane eventKey="pin-states" className={'py-3'}>
-                      <div className={'mt-3'}> </div>
-                      <Card.Text>
-                        <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
-                        <Alert variant={'info'}>
-                          <em>Note:</em> Flights before April 2024 do not have recorded pin states due to a storage error, this may be fixed
-                          in future updates
-                        </Alert>
-                      </Card.Text>
-                      <LogWindow
-                        registerControls={this.registerControls}
-                        title={'Pin States Log'}
-                        autoscroll={true}
-                      />
-                    </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
               </Card.Body>
+            </Card>
+          </Column>
+        </Row>
+        <Row>
+          <Column xs={12}>
+            <Card className={'mt-3'} style={{height: '37rem'}}>
+              <Card.Title className={'mt-3'}>Pin States</Card.Title>
+              <Card.Text>
+                <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
+                <Alert variant={'info'}>
+                  <em>Note:</em> Flights before April 2024 do not have recorded pin states due to a storage error, this
+                  may be fixed
+                  in future updates
+                </Alert>
+              </Card.Text>
+              <LogWindow
+                registerControls={this.registerControls}
+                title={'Pin States Log'}
+                autoscroll={true}
+              />
             </Card>
           </Column>
         </Row>
