@@ -286,12 +286,14 @@ class Flight {
   pinStates () {
     const inputCol = this.fields.indexOf('input_pins');
     const outputCol = this.fields.indexOf('output_pins');
+    const altitudeCol = this.fields.indexOf('altitude');
     return this.data.reduce((filtered, row) => {
       if (this.pointValid(row)) {
         filtered.push({
           input: row[inputCol],
           output: row[outputCol],
-          timestamp: moment.unix(row[this.dt_col]).format('YYYY-MM-DD HH:mm:ss')
+          timestamp: row[this.dt_col],
+          altitude: row[altitudeCol]
         })
       }
       return filtered
