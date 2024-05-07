@@ -58,7 +58,7 @@ class LogItem {
     const statusVariant = this.changed ? 'success' : 'primary';
 
     return (
-      <div style={{backgroundColor: selected ? '#f9f2fd' : '#FFFFFF'}}>
+      <div style={{backgroundColor: selected ? '#f8e8fd' : '#FFFFFF'}}>
         <samp>[</samp>
         <ColorSamp color={'#d300a4'}>{moment.utc(this.datetime, 'X').format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
         <samp>]</samp>
@@ -196,12 +196,14 @@ export default class LogWindow extends Component {
   }
 
   componentDidUpdate () {
-    if (this.props.selectedPosition) {
-      if (this.selectedItemEl != null) {
-        this.selectedItemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    if (this.state.autoscroll) {
+      if (this.props.selectedPosition) {
+        if (this.selectedItemEl != null) {
+          this.selectedItemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+      } else {
+        this.scrollToBottom();
       }
-    } else if (this.state.autoscroll) {
-      this.scrollToBottom();
     }
   }
 
