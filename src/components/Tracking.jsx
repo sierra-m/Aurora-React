@@ -715,6 +715,7 @@ class Tracking extends Component {
                 registerControls={this.registerControls}
                 title={'Pin States Log'}
                 autoscroll={true}
+                selectedPosition={this.state.selectedPosition}
               />
             </Card>
           </Column>
