@@ -39,36 +39,36 @@ import Row from "react-bootstrap/Row";
 
 
 class LogItem {
-  constructor (time, status, inputPins, outputPins) {
-    this.time = time;
+  constructor (datetime, status, inputPins, outputPins, altitude) {
+    this.datetime = datetime;
     this.status = status;
     this.changed = status === 'changed';
     this.inputPins = inputPins;
     this.outputPins = outputPins;
+    this.altitude = altitude;
   }
 
   // For searching/comparing
   toString () {
-    return `[${this.time}] ${this.status} ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
+    return `[${this.datetime}] ${this.status} ${this.changed && '  '} | input: ${this.inputPins}, output: ${this.outputPins}`
   }
 
-  toComponent () {
+  toComponent (selected) {
     // Determine Bootstrap Badge color from status
-    let statusVariant;
-    if (this.changed) statusVariant = 'success';
-    else  statusVariant = 'primary';
+    const statusVariant = this.changed ? 'success' : 'primary';
 
     return (
-      <div>
-        <ColorSamp color={'#d300a4'}>[{this.time}] </ColorSamp>
-        {/* First letter caps */}
-        <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
-        {/* Add spaces as padding for alignment*/}
-        {this.changed && <samp style={{whiteSpace: 'pre'}}>  </samp>}
+      <div style={{backgroundColor: selected ? '#cdb7d9' : '#FFFFFF'}}>
+        <samp>[</samp>
+        <ColorSamp color={'#d300a4'}>{moment.unix(this.datetime).format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
+        <samp>]</samp>
+        <ColorSamp color={'#b44b00'}>{this.altitude} meters</ColorSamp>
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
         <ColorSamp color={(this.outputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.outputPins}`}</ColorSamp>
+        {/* First letter caps */}
+        <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
         {'\n'}
       </div>
     )
@@ -114,7 +114,7 @@ export default class LogWindow extends Component {
     this.el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
   }
 
-  print = (inputPins, outputPins, datetime) => {
+  print = (inputPins, outputPins, datetime, altitude) => {
     let newIn = null;
     let newOut = null;
     let inChanged = false;
@@ -133,7 +133,8 @@ export default class LogWindow extends Component {
       datetime,
       (inChanged || outChanged) ? 'changed' : 'unchanged',
       newIn,
-      newOut
+      newOut,
+      altitude
     );
     this.state.items.push(logItem);
     this.setState({items: this.state.items});
@@ -238,6 +239,7 @@ export default class LogWindow extends Component {
                   variant="outline-primary"
                   id="log-window-filter-dropdown"
                   size={'sm'}
+                  className={'pr-1'}
                 >
                   Filter
                   <i className="bi bi-filter pl-1"></i>
@@ -296,7 +298,7 @@ export default class LogWindow extends Component {
               </Dropdown>
             </Column>
             <Column>
-              <Form>
+              <Form className={'align-middle'}>
                 <Form.Check
                   type={"checkbox"}
                   id={"autoscroll-check"}
