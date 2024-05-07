@@ -58,18 +58,18 @@ class LogItem {
     const statusVariant = this.changed ? 'success' : 'primary';
 
     return (
-      <div style={{backgroundColor: selected ? '#cdb7d9' : '#FFFFFF'}}>
+      <div style={{backgroundColor: selected ? '#e6d8ee' : '#FFFFFF'}}>
         <samp>[</samp>
         <ColorSamp color={'#d300a4'}>{moment.utc(this.datetime, 'X').format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
         <samp>]</samp>
-        <ColorSamp color={'#b44b00'}>{`${this.altitude}`.padStart(6, ' ')} meters</ColorSamp>
+        <ColorSamp color={'#b03e00'} style={{whiteSpace: 'pre'}}>{`${this.altitude}`.padStart(6, ' ')} meters</ColorSamp>
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
         <ColorSamp color={(this.outputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.outputPins}`}</ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
-        {'\n'}
+        {'  \n'}
       </div>
     )
   }
@@ -196,7 +196,13 @@ export default class LogWindow extends Component {
   }
 
   componentDidUpdate () {
-    if (this.state.autoscroll) this.scrollToBottom();
+    if (this.props.selectedPosition) {
+      if (this.selectedItemEl != null) {
+        this.selectedItemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+    } else if (this.state.autoscroll) {
+      this.scrollToBottom();
+    }
   }
 
   render () {
@@ -212,6 +218,9 @@ export default class LogWindow extends Component {
                   {((this.statusFilterActive() || this.inputFilterActive() || this.outputFilterActive())
                     ? this.applyFilters(this.state.items)
                     : this.state.items).map(item => {
+                    const selected = this.props.selectedPosition
+                      ? this.props.selectedPosition.datetime.unix() === item.datetime
+                      : false;
                     if (typeof item === 'string') return (
                       <div>
                         <samp>
@@ -220,10 +229,15 @@ export default class LogWindow extends Component {
                         {'\n'}
                       </div>
                     );
-                    else return item.toComponent(
-                      this.props.selectedPosition ?
-                        this.props.selectedPosition.datetime.unix() === item.datetime : false
-                    );
+                    else return (
+                      <div ref={el => {
+                        if (selected) {
+                          this.selectedItemEl = el;
+                        }
+                      }}>
+                        {item.toComponent(selected)}
+                      </div>
+                    )
                   })}
                   <div ref={el => {
                     this.el = el;
