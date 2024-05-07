@@ -60,9 +60,9 @@ class LogItem {
     return (
       <div style={{backgroundColor: selected ? '#cdb7d9' : '#FFFFFF'}}>
         <samp>[</samp>
-        <ColorSamp color={'#d300a4'}>{moment.unix(this.datetime).format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
+        <ColorSamp color={'#d300a4'}>{moment.utc(this.datetime, 'X').format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
         <samp>]</samp>
-        <ColorSamp color={'#b44b00'}>{this.altitude} meters</ColorSamp>
+        <ColorSamp color={'#b44b00'}>{`${this.altitude}`.padStart(6, ' ')} meters</ColorSamp>
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
@@ -220,7 +220,10 @@ export default class LogWindow extends Component {
                         {'\n'}
                       </div>
                     );
-                    else return item.toComponent();
+                    else return item.toComponent(
+                      this.props.selectedPosition ?
+                        this.props.selectedPosition.datetime.unix() === item.datetime : false
+                    );
                   })}
                   <div ref={el => {
                     this.el = el;
