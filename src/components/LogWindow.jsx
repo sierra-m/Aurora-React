@@ -58,18 +58,18 @@ class LogItem {
     const statusVariant = this.changed ? 'success' : 'primary';
 
     return (
-      <div style={{backgroundColor: selected ? '#e6d8ee' : '#FFFFFF'}}>
+      <div style={{backgroundColor: selected ? '#f9f2fd' : '#FFFFFF'}}>
         <samp>[</samp>
         <ColorSamp color={'#d300a4'}>{moment.utc(this.datetime, 'X').format('YYYY-MM-DD HH:mm:ss')}</ColorSamp>
         <samp>]</samp>
-        <ColorSamp color={'#b03e00'} style={{whiteSpace: 'pre'}}>{`${this.altitude}`.padStart(6, ' ')} meters</ColorSamp>
+        <ColorSamp color={'#b03e00'} keepWhitespace={true}>{`${this.altitude}`.padStart(6, ' ')} meters</ColorSamp>
         <samp> | Input: </samp>
         <ColorSamp color={(this.inputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.inputPins}`}</ColorSamp>
         <samp>, Output: </samp>
-        <ColorSamp color={(this.outputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.outputPins}`}</ColorSamp>
+        <ColorSamp color={(this.outputPins === null) ? '#7c5100' : '#006dbd'}>{`${this.outputPins} `}</ColorSamp>
         {/* First letter caps */}
         <Badge variant={statusVariant}>{this.status.charAt(0).toUpperCase() + this.status.slice(1)}</Badge>
-        {'  \n'}
+        {'\n'}
       </div>
     )
   }
@@ -333,7 +333,7 @@ export default class LogWindow extends Component {
 }
 
 const ColorSamp = (props) => (
-  <samp style={{color: props.color}}>{props.children}</samp>
+  <samp style={{color: props.color, whiteSpace: props.keepWhitespace ? 'pre': 'normal'}}>{props.children}</samp>
 );
 
 export {LogItem}
