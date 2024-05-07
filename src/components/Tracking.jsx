@@ -702,21 +702,23 @@ class Tracking extends Component {
         <Row>
           <Column xs={12}>
             <Card className={'mt-3'} style={{height: '37rem'}}>
-              <Card.Title className={'mt-3'}>Pin States</Card.Title>
-              <Card.Text>
-                <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
-                <Alert variant={'info'}>
-                  <em>Note:</em> Flights before April 2024 do not have recorded pin states due to a storage error, this
-                  may be fixed
-                  in future updates
-                </Alert>
-              </Card.Text>
-              <LogWindow
-                registerControls={this.registerControls}
-                title={'Pin States Log'}
-                autoscroll={true}
-                selectedPosition={this.state.selectedPosition}
-              />
+              <Card.Body>
+                <Card.Title className={'mt-3'}>Pin States</Card.Title>
+                <Card.Text>
+                  <div className={'pb-3'}>This log shows NAL Modem pin states for each time stamp.</div>
+                  <Alert variant={'info'}>
+                    <em>Note:</em> Flights before April 2024 do not have recorded pin states due to a storage error, this
+                    may be fixed
+                    in future updates
+                  </Alert>
+                </Card.Text>
+                <LogWindow
+                  registerControls={this.registerControls}
+                  title={'Pin States Log'}
+                  autoscroll={true}
+                  selectedPosition={this.state.selectedPosition}
+                />
+              </Card.Body>
             </Card>
           </Column>
         </Row>
